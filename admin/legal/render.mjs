@@ -1,0 +1,177 @@
+// Turns assets/legal/legal.json (the single source of the privacy policy,
+// terms and support pages) into resolved documents and static HTML.
+// The Flutter app reads the same JSON and resolves it with the same rules
+// (lib/features/legal/domain/legal_content.dart).
+
+export const LANGS = ['ar', 'en'];
+export const DOCS = ['privacy', 'terms', 'support'];
+
+const money = (lang, amount) => (lang === 'ar' ? `${amount} ر.س` : `SAR ${amount}`);
+
+/** Values for the {{placeholders}} in the text. */
+export function placeholderValues(meta, lang) {
+  return {
+    appName: meta.appName[lang],
+    developerName: meta.developerName[lang],
+    supportEmail: meta.supportEmail,
+    effectiveDate: meta.effectiveDate[lang],
+    monthlyPrice: money(lang, meta.monthlyPriceSar),
+    yearlyPrice: money(lang, meta.yearlyPriceSar),
+    trialDays: String(meta.trialDays),
+    freeGoals: String(meta.freeGoalCount),
+  };
+}
+
+function fill(text, values) {
+  return text.replace(/\{\{(\w+)\}\}/g, (_, key) => {
+    if (!Object.hasOwn(values, key)) throw new Error(`Unknown placeholder {{${key}}}`);
+    return values[key];
+  });
+}
+
+/** "ads" → shown when the flag is on; "!ads" → shown when it is off. */
+function visible(onlyIf, features) {
+  if (!onlyIf) return true;
+  return onlyIf.startsWith('!') ? !features[onlyIf.slice(1)] : Boolean(features[onlyIf]);
+}
+
+/**
+ * @returns {{ title:string, intro:string, effectiveDate:string, appName:string,
+ *   developerName:string, supportEmail:string,
+ *   sections: Array<{heading:string, blocks: Array<{paragraph:string}|{bullets:string[]}>}> }}
+ */
+export function resolveDocument(legal, name, lang) {
+  const source = legal.documents[name]?.[lang];
+  if (!source) throw new Error(`No ${name} document in "${lang}"`);
+  const values = placeholderValues(legal.meta, lang);
+  const features = legal.features ?? {};
+  const f = (t) => fill(t, values);
+
+  const sections = [];
+  for (const section of source.sections) {
+    if (!visible(section.onlyIf, features)) continue;
+    const blocks = [];
+    for (const block of section.blocks) {
+      if (typeof block === 'string') {
+        blocks.push({ paragraph: f(block) });
+      } else if (block.bullets) {
+        const items = block.bullets
+          .filter((b) => typeof b === 'string' || visible(b.onlyIf, features))
+          .map((b) => f(typeof b === 'string' ? b : b.text));
+        if (items.length > 0) blocks.push({ bullets: items });
+      } else if (visible(block.onlyIf, features)) {
+        blocks.push({ paragraph: f(block.text) });
+      }
+    }
+    if (blocks.length > 0) sections.push({ heading: f(section.heading), blocks });
+  }
+  return {
+    title: f(source.title),
+    intro: f(source.intro),
+    effectiveDate: values.effectiveDate,
+    appName: values.appName,
+    developerName: values.developerName,
+    supportEmail: values.supportEmail,
+    sections,
+  };
+}
+
+/** Everything still to fill in before a release. */
+export function releaseBlockers(legal) {
+  const problems = [];
+  const email = legal.meta.supportEmail;
+  if (/example\.(com|org|net)$/i.test(email)) problems.push(`meta.supportEmail is a placeholder (${email})`);
+  for (const lang of LANGS) {
+    if (/[\[\]]/.test(legal.meta.developerName[lang])) {
+      problems.push(`meta.developerName.${lang} is still a placeholder`);
+    }
+  }
+  return problems;
+}
+
+const esc = (s) =>
+  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+const NAV = {
+  ar: { privacy: 'سياسة الخصوصية', terms: 'شروط الاستخدام', support: 'الدعم', other: 'English', otherLang: 'en' },
+  en: { privacy: 'Privacy Policy', terms: 'Terms of Use', support: 'Support', other: 'العربية', otherLang: 'ar' },
+};
+
+export const fileName = (name, lang) => (lang === 'ar' ? `${name}.html` : `${name}.en.html`);
+
+export function renderHtml(legal, name, lang) {
+  const doc = resolveDocument(legal, name, lang);
+  const nav = NAV[lang];
+  const email = esc(doc.supportEmail);
+  const withEmail = (text) =>
+    esc(text).split(email).join(`<bdi><a href="mailto:${email}">${email}</a></bdi>`);
+
+  const body = doc.sections
+    .map((s) => {
+      const blocks = s.blocks
+        .map((b) =>
+          b.bullets
+            ? `<ul>${b.bullets.map((i) => `<li>${withEmail(i)}</li>`).join('')}</ul>`
+            : `<p>${withEmail(b.paragraph)}</p>`,
+        )
+        .join('\n      ');
+      return `    <section>\n      <h2>${esc(s.heading)}</h2>\n      ${blocks}\n    </section>`;
+    })
+    .join('\n');
+
+  const links = ['privacy', 'terms', 'support']
+    .map((n) => `<a href="${fileName(n, lang)}"${n === name ? ' aria-current="page"' : ''}>${nav[n]}</a>`)
+    .join('\n      ');
+  const dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+  return `<!doctype html>
+<html lang="${lang}" dir="${dir}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${esc(doc.title)} — ${esc(doc.appName)}</title>
+  <meta name="description" content="${esc(doc.intro)}">
+  <!-- Generated by scripts/build-legal.mjs from assets/legal/legal.json. Do not edit by hand. -->
+  <style>
+    @font-face { font-family: 'IBM Plex Sans Arabic'; font-weight: 400; font-display: swap; src: url('../fonts/IBMPlexSansArabic-Regular.ttf') format('truetype'); }
+    @font-face { font-family: 'IBM Plex Sans Arabic'; font-weight: 700; font-display: swap; src: url('../fonts/IBMPlexSansArabic-Bold.ttf') format('truetype'); }
+    :root { color-scheme: light; --bg: #faf8ff; --surface: #fff; --text: #131b2e; --muted: #404942; --primary: #004328; --line: #bfc9c0; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 400 16px/1.8 'IBM Plex Sans Arabic', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+    header { background: var(--primary); color: #fff; padding: 20px 16px; }
+    header .in, main, footer { max-width: 760px; margin: 0 auto; }
+    header h1 { margin: 0; font-size: 1.5rem; }
+    header p { margin: 4px 0 0; opacity: .85; }
+    nav { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 14px; }
+    nav a { color: #a9f3c5; text-decoration: none; padding: 4px 0; }
+    nav a[aria-current] { color: #fff; font-weight: 700; border-bottom: 2px solid #a9f3c5; }
+    main { padding: 24px 16px 8px; }
+    .lead { color: var(--muted); font-size: 1.05rem; margin-top: 0; }
+    section { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 4px 18px 8px; margin: 14px 0; }
+    h2 { font-size: 1.1rem; color: var(--primary); margin: 14px 0 0; }
+    p, li { margin: 8px 0; }
+    ul { padding-inline-start: 22px; margin: 8px 0; }
+    a { color: var(--primary); }
+    footer { padding: 8px 16px 40px; color: var(--muted); font-size: .9rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="in">
+      <h1>${esc(doc.title)}</h1>
+      <p>${esc(doc.appName)} · ${esc(doc.effectiveDate)}</p>
+      <nav>
+      ${links}
+      <a href="${fileName(name, nav.otherLang)}" hreflang="${nav.otherLang}" lang="${nav.otherLang}">${nav.other}</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <p class="lead">${withEmail(doc.intro)}</p>
+${body}
+  </main>
+  <footer>${esc(doc.developerName)} · ${esc(doc.effectiveDate)}</footer>
+</body>
+</html>
+`;
+}

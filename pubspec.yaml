@@ -1,0 +1,57 @@
+name: rateby
+description: راتبي وتخطيطي المالي — Saudi salary-cycle budgeting app.
+publish_to: none
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  firebase_core: ^3.8.0
+  firebase_auth: ^5.3.4
+  cloud_firestore: ^5.5.0
+  cloud_functions: ^5.2.0
+  in_app_purchase: ^3.2.0
+  flutter_local_notifications: ^18.0.1
+  google_mobile_ads: ^5.3.0
+  flutter_riverpod: ^2.6.1
+  pdf: ^3.11.1
+  intl: ">=0.19.0 <1.0.0"
+  share_plus: ^10.1.2
+  shared_preferences: ^2.3.0
+  timezone: ^0.10.0
+  url_launcher: ^6.3.1
+
+dev_dependencies:
+  fake_cloud_firestore: ^3.0.3
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  # Strips the alpha channel from the App Store icon (tool/gen_brand_test.dart).
+  image: ^4.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/legal/legal.json
+
+  fonts:
+    - family: IBMPlexSansArabic
+      fonts:
+        - asset: assets/fonts/IBMPlexSansArabic-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/IBMPlexSansArabic-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/IBMPlexSansArabic-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/IBMPlexSansArabic-Bold.ttf
+          weight: 700
+
+dependency_overrides:
+  archive: ^4.0.10

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "587906024162",
+    "project_id": "rateby-app-sa",
+    "storage_bucket": "rateby-app-sa.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:587906024162:android:c3f6e1e2ea7f20b35714bb",
+        "android_client_info": {
+          "package_name": "com.rateby.rateby"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0iKdHknvNSSTbtzZYa5_qNYdrIg9CVWo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

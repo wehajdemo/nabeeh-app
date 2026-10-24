@@ -1,0 +1,503 @@
+{
+  "version": 1,
+  "meta": {
+    "appName": {
+      "ar": "نبيه",
+      "en": "Nabeeh"
+    },
+    "developerName": {
+      "ar": "نبراس تك (مطوّر مستقل)",
+      "en": "Nibras Tech (independent developer)"
+    },
+    "supportEmail": "nibras.tech.sa@gmail.com",
+    "effectiveDate": {
+      "ar": "23 أكتوبر 2026",
+      "en": "23 October 2026"
+    },
+    "monthlyPriceSar": 9,
+    "yearlyPriceSar": 67,
+    "trialDays": 7,
+    "freeGoalCount": 3
+  },
+  "features": {
+    "ads": true
+  },
+  "documents": {
+    "privacy": {
+      "ar": {
+        "title": "سياسة الخصوصية",
+        "intro": "توضّح هذه السياسة كيف يتعامل تطبيق {{appName}} مع بياناتك. بياناتك المالية تبقى على جهازك، ولا نطلب منك إنشاء حساب أو تسجيل الدخول.",
+        "sections": [
+          {
+            "heading": "من نحن",
+            "blocks": [
+              "يصدر تطبيق {{appName}} {{developerName}} («نحن»). للتواصل بشأن الخصوصية: {{supportEmail}}."
+            ]
+          },
+          {
+            "heading": "بياناتك المالية تبقى على جهازك",
+            "blocks": [
+              "الراتب الصافي، ويوم نزول الراتب، والالتزامات الشهرية، وأهداف الادخار، والمصاريف التي تسجّلها: كلها تُحفظ على جهازك فقط. لا نرسلها إلى خوادمنا ولا إلى أي جهة أخرى، ولا نستطيع الاطلاع عليها.",
+              "عند تصدير تقرير (PDF أو CSV) يُنشأ الملف على جهازك، وأنت من يقرر مشاركته ومع من."
+            ]
+          },
+          {
+            "heading": "ما الذي نعالجه",
+            "blocks": [
+              {
+                "bullets": [
+                  "جدول مواعيد الصرف: يقرأ التطبيق من خدمة Firebase (Cloud Firestore) التابعة لـ Google جدولاً عاماً بمواعيد نزول الرواتب والدعومات. هذه بيانات عامة لا تتضمن شيئاً عنك، لكن أي اتصال بالإنترنت يكشف للخدمة عنوان IP ومعلومات تقنية عن الجهاز لازمة لإتمام الاتصال.",
+                  "الاشتراك في نبيه بلس: عند الاشتراك أو استعادة المشتريات يرسل التطبيق إلى خادمنا رمز الشراء ومعرّف المنتج الصادرين عن Google Play، مع معرّف مجهول ينشئه التطبيق عبر Firebase Authentication دون أي بيانات شخصية. نتحقق من الرمز لدى Google Play ونحفظ حالة الاشتراك وتاريخ انتهائه. لا نستلم بيانات بطاقتك المصرفية؛ يتم الدفع كلياً عبر Google Play.",
+                  "التنبيهات: تُجدول على جهازك ولا تمر عبر أي خادم."
+                ]
+              },
+              {
+                "text": "لا نجمع اسمك ولا بريدك الإلكتروني ولا رقم هاتفك ولا موقعك ولا جهات اتصالك، ولا نستخدم أدوات تحليل سلوك أو تتبّع.",
+                "onlyIf": "!ads"
+              },
+              {
+                "text": "لا نجمع اسمك ولا بريدك الإلكتروني ولا رقم هاتفك ولا موقعك ولا جهات اتصالك، ولا نستخدم أدوات تحليل سلوك أو تتبّع بخلاف ما تجمعه شبكة الإعلانات المذكورة في قسم الإعلانات.",
+                "onlyIf": "ads"
+              }
+            ]
+          },
+          {
+            "heading": "الإعلانات",
+            "onlyIf": "ads",
+            "blocks": [
+              "تعرض النسخة المجانية إعلانات عبر Google AdMob. قد تجمع AdMob وشركاؤها معرّف الإعلانات في جهازك وعنوان IP وبيانات الاستخدام لعرض الإعلانات وقياس أدائها ومنع الاحتيال، وفق سياسات Google. يمكنك إعادة ضبط معرّف الإعلانات أو إيقاف تخصيص الإعلانات من إعدادات جهازك.",
+              "في المناطق التي تشترط ذلك (مثل المنطقة الاقتصادية الأوروبية) نطلب موافقتك قبل عرض الإعلانات عبر نموذج موافقة من Google، ويمكنك تغيير اختيارك لاحقاً.",
+              "لا نشارك بياناتك المالية مع شبكة الإعلانات. ويزيل اشتراك نبيه بلس الإعلانات."
+            ]
+          },
+          {
+            "heading": "كيف نستخدم البيانات",
+            "blocks": [
+              {
+                "bullets": [
+                  "تشغيل ميزات التطبيق.",
+                  "التحقق من الاشتراك وتفعيل نبيه بلس.",
+                  "عرض جدول مواعيد الصرف المحدّث.",
+                  "منع إساءة استخدام الاشتراك."
+                ]
+              },
+              "لا نبيع بياناتك."
+            ]
+          },
+          {
+            "heading": "الجهات التي تعالج البيانات",
+            "blocks": [
+              "نعتمد على خدمات Google: Google Play (المدفوعات والاشتراكات) وFirebase (قاعدة البيانات والمصادقة المجهولة والدوال السحابية). تخضع معالجتها لشروط Google وسياساتها.",
+              {
+                "text": "وتُعرض الإعلانات عبر Google AdMob.",
+                "onlyIf": "ads"
+              }
+            ]
+          },
+          {
+            "heading": "الاحتفاظ والحذف",
+            "blocks": [
+              {
+                "bullets": [
+                  "بيانات التطبيق على جهازك: تُحذف بالضغط على «تصفير الحساب والبدء من جديد» في الإعدادات، أو بإزالة التطبيق.",
+                  "سجل الاشتراك على خادمنا (رمز الشراء والمعرّف المجهول وحالة الاشتراك): نحتفظ به ما دام ضرورياً لتقديم الاشتراك ولالتزاماتنا المحاسبية والنظامية. لطلب حذفه راسلنا على {{supportEmail}} مع ما يثبت الشراء. قد يؤدي حذفه إلى إيقاف مزايا نبيه بلس على ذلك الحساب."
+                ]
+              }
+            ]
+          },
+          {
+            "heading": "الأمان",
+            "blocks": [
+              "تتم الاتصالات مع الخدمات السحابية عبر قنوات مشفّرة (HTTPS)، وتُحفظ بياناتك المحلية في مساحة التطبيق المحمية في نظام Android. لا توجد وسيلة نقل أو تخزين آمنة بنسبة 100%، لذا ننصحك بحماية جهازك بقفل الشاشة."
+            ]
+          },
+          {
+            "heading": "الأطفال",
+            "blocks": [
+              "التطبيق موجّه للبالغين، ولا نجمع عمداً بيانات من الأطفال."
+            ]
+          },
+          {
+            "heading": "حقوقك",
+            "blocks": [
+              "لك أن تطلب معرفة البيانات التي نحتفظ بها عنك أو تصحيحها أو حذفها، وفق الأنظمة المعمول بها في المملكة العربية السعودية ومنها نظام حماية البيانات الشخصية. راسلنا على {{supportEmail}} وسنردّ خلال مدة معقولة."
+            ]
+          },
+          {
+            "heading": "تحديث هذه السياسة",
+            "blocks": [
+              "قد نحدّث هذه السياسة، وسنعرض النسخة المحدّثة في التطبيق وعلى صفحتها في الويب مع تاريخ السريان. تاريخ سريان هذه النسخة: {{effectiveDate}}."
+            ]
+          }
+        ]
+      },
+      "en": {
+        "title": "Privacy Policy",
+        "intro": "This policy explains how {{appName}} handles your data. Your financial data stays on your device, and you do not need to create an account or sign in.",
+        "sections": [
+          {
+            "heading": "Who we are",
+            "blocks": [
+              "{{appName}} is published by {{developerName}} (“we”). Privacy contact: {{supportEmail}}."
+            ]
+          },
+          {
+            "heading": "Your financial data stays on your device",
+            "blocks": [
+              "Your net salary, payday, monthly commitments, savings goals and the expenses you record are stored on your device only. We do not send them to our servers or to anyone else, and we cannot see them.",
+              "When you export a report (PDF or CSV) the file is created on your device, and you decide whether and with whom to share it."
+            ]
+          },
+          {
+            "heading": "What we process",
+            "blocks": [
+              {
+                "bullets": [
+                  "Payout schedule: the app reads a public schedule of salary and benefit payout dates from Google’s Firebase service (Cloud Firestore). It contains nothing about you, but any internet connection reveals your IP address and technical device information to the service, as needed to complete the connection.",
+                  "Nabeeh Plus subscription: when you subscribe or restore purchases, the app sends our server the purchase token and product ID issued by Google Play, together with an anonymous ID created by Firebase Authentication that holds no personal data. We verify the token with Google Play and store the subscription status and end date. We never receive your card details; payment is handled entirely by Google Play.",
+                  "Reminders: scheduled on your device and never pass through a server."
+                ]
+              },
+              {
+                "text": "We do not collect your name, email address, phone number, location or contacts, and we do not use behavioural analytics or tracking tools.",
+                "onlyIf": "!ads"
+              },
+              {
+                "text": "We do not collect your name, email address, phone number, location or contacts, and we do not use behavioural analytics or tracking tools other than what the ad network described in the Advertising section collects.",
+                "onlyIf": "ads"
+              }
+            ]
+          },
+          {
+            "heading": "Advertising",
+            "onlyIf": "ads",
+            "blocks": [
+              "The free version shows ads through Google AdMob. AdMob and its partners may collect your device advertising ID, IP address and usage data to serve and measure ads and prevent fraud, under Google’s policies. You can reset your advertising ID or turn off ad personalisation in your device settings.",
+              "Where the law requires it (for example the European Economic Area) we ask for your consent through a Google consent form before showing ads, and you can change your choice later.",
+              "We do not share your financial data with the ad network. A Nabeeh Plus subscription removes ads."
+            ]
+          },
+          {
+            "heading": "How we use data",
+            "blocks": [
+              {
+                "bullets": [
+                  "To run the app’s features.",
+                  "To verify subscriptions and unlock Nabeeh Plus.",
+                  "To show the up-to-date payout schedule.",
+                  "To prevent abuse of subscriptions."
+                ]
+              },
+              "We do not sell your data."
+            ]
+          },
+          {
+            "heading": "Who processes data for us",
+            "blocks": [
+              "We rely on Google services: Google Play (payments and subscriptions) and Firebase (database, anonymous authentication and cloud functions). Their processing is governed by Google’s terms and policies.",
+              {
+                "text": "Ads are served through Google AdMob.",
+                "onlyIf": "ads"
+              }
+            ]
+          },
+          {
+            "heading": "Retention and deletion",
+            "blocks": [
+              {
+                "bullets": [
+                  "App data on your device: deleted with “Reset account and start over” in Settings, or by uninstalling the app.",
+                  "Subscription record on our server (purchase token, anonymous ID and subscription status): kept as long as necessary to provide the subscription and meet our accounting and legal obligations. To ask for deletion, email {{supportEmail}} with proof of purchase. Deleting it may switch off Nabeeh Plus for that account."
+                ]
+              }
+            ]
+          },
+          {
+            "heading": "Security",
+            "blocks": [
+              "Connections to cloud services use encrypted channels (HTTPS), and your local data is kept in the app’s protected storage on Android. No method of transmission or storage is 100% secure, so we recommend protecting your device with a screen lock."
+            ]
+          },
+          {
+            "heading": "Children",
+            "blocks": [
+              "The app is intended for adults and we do not knowingly collect data from children."
+            ]
+          },
+          {
+            "heading": "Your rights",
+            "blocks": [
+              "You may ask what data we hold about you, and ask us to correct or delete it, in line with the laws that apply in the Kingdom of Saudi Arabia, including the Personal Data Protection Law. Email {{supportEmail}} and we will reply within a reasonable time."
+            ]
+          },
+          {
+            "heading": "Changes to this policy",
+            "blocks": [
+              "We may update this policy and will show the updated version in the app and on its web page with the effective date. This version is effective {{effectiveDate}}."
+            ]
+          }
+        ]
+      }
+    },
+    "terms": {
+      "ar": {
+        "title": "شروط الاستخدام",
+        "intro": "باستخدامك تطبيق {{appName}} فإنك توافق على هذه الشروط. إن لم توافق عليها فلا تستخدم التطبيق.",
+        "sections": [
+          {
+            "heading": "ما هو التطبيق",
+            "blocks": [
+              "{{appName}} أداة لتنظيم ميزانيتك الشخصية: تحسب الحد اليومي للصرف بحسب راتبك والتزاماتك وأهدافك، وتذكّرك بمواعيد الصرف. يصدره {{developerName}}."
+            ]
+          },
+          {
+            "heading": "ليس نصيحة مالية",
+            "blocks": [
+              "الأرقام تقديرات مبنية على ما تدخله أنت. لا يُعدّ التطبيق نصيحة مالية أو استثمارية أو قانونية أو مصرفية، ولسنا جهة مرخّصة لتقديم ذلك. قراراتك المالية مسؤوليتك."
+            ]
+          },
+          {
+            "heading": "مواعيد الصرف",
+            "blocks": [
+              "مواعيد نزول الرواتب والدعومات المعروضة معلومات إرشادية نجمعها ونحدّثها يدوياً من مصادر عامة، وقد تتغير أو تتأخر أو تحتوي أخطاء. وهي ليست إعلاناً رسمياً من أي جهة، ولا نمثّل أي جهة حكومية أو مصرفية. تحقق دائماً من الجهة المعنية."
+            ]
+          },
+          {
+            "heading": "بياناتك",
+            "blocks": [
+              "أنت مسؤول عن صحة ما تدخله. بياناتك محفوظة على جهازك؛ وفقدان الجهاز أو حذف التطبيق أو تصفير الحساب يؤدي إلى فقدانها ولا يمكننا استرجاعها. استخدم تصدير التقارير إن أردت نسخة منها."
+            ]
+          },
+          {
+            "heading": "نبيه بلس",
+            "blocks": [
+              {
+                "bullets": [
+                  "الأسعار: {{monthlyPrice}} شهرياً أو {{yearlyPrice}} سنوياً، شاملة ضريبة القيمة المضافة.",
+                  "تجربة مجانية مدتها {{trialDays}} أيام للمشترك المؤهّل، وتحدد Google Play أهليتك لها.",
+                  "يتجدد الاشتراك تلقائياً في نهاية كل فترة ما لم تلغه قبل موعد التجديد.",
+                  "تتم الفوترة والاسترداد عبر Google Play وتخضع لسياساتها. للإلغاء: Google Play ← المدفوعات والاشتراكات ← الاشتراكات، أو زر «إدارة الاشتراك» في تبويب الترقية.",
+                  "عند الإلغاء تبقى مزايا نبيه بلس حتى نهاية الفترة المدفوعة."
+                ]
+              },
+              "مزايا نبيه بلس:",
+              {
+                "bullets": [
+                  "أهداف ادخار غير محدودة (تتسع النسخة المجانية لـ {{freeGoals}} أهداف).",
+                  "تصدير تقرير الدورة الحالية بصيغتي PDF وCSV.",
+                  "تنبيهات حد الصرف اليومي.",
+                  {
+                    "text": "إزالة الإعلانات.",
+                    "onlyIf": "ads"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "heading": "الاستخدام المقبول",
+            "blocks": [
+              "لا تحاول الالتفاف على الاشتراك أو التحايل على التحقق منه، ولا تجرِ هندسة عكسية للتطبيق أو تسيء استخدام خدماتنا."
+            ]
+          },
+          {
+            "heading": "حدود المسؤولية",
+            "blocks": [
+              "يُقدَّم التطبيق «كما هو». بالقدر الذي تسمح به الأنظمة المعمول بها، لا نتحمل مسؤولية أي خسارة ناتجة عن الاعتماد على تقديرات التطبيق أو مواعيد الصرف المعروضة أو انقطاع الخدمة. ولا يؤثر ذلك على أي حقوق لا يجوز نظاماً التنازل عنها."
+            ]
+          },
+          {
+            "heading": "التعديل والإيقاف",
+            "blocks": [
+              "قد نعدّل التطبيق أو هذه الشروط أو نوقف بعض المزايا، وسنعرض الشروط المحدّثة في التطبيق. استمرارك في الاستخدام بعد التحديث يعني قبولك له. تاريخ سريان هذه النسخة: {{effectiveDate}}."
+            ]
+          },
+          {
+            "heading": "النظام الواجب التطبيق",
+            "blocks": [
+              "تخضع هذه الشروط لأنظمة المملكة العربية السعودية، وتختص محاكمها بالنظر في أي نزاع، دون إخلال بحقوقك كمستهلك."
+            ]
+          },
+          {
+            "heading": "التواصل",
+            "blocks": [
+              "لأي استفسار: {{supportEmail}}."
+            ]
+          }
+        ]
+      },
+      "en": {
+        "title": "Terms of Use",
+        "intro": "By using {{appName}} you agree to these terms. If you do not agree, do not use the app.",
+        "sections": [
+          {
+            "heading": "What the app is",
+            "blocks": [
+              "{{appName}} is a personal budgeting tool: it works out your daily spending limit from your salary, commitments and goals, and reminds you of payout dates. It is published by {{developerName}}."
+            ]
+          },
+          {
+            "heading": "Not financial advice",
+            "blocks": [
+              "The figures are estimates based on what you enter. The app is not financial, investment, legal or banking advice, and we are not licensed to give it. Your financial decisions are your responsibility."
+            ]
+          },
+          {
+            "heading": "Payout dates",
+            "blocks": [
+              "The salary and benefit payout dates shown are guidance that we collect and update by hand from public sources. They can change, arrive late or contain errors. They are not an official announcement by any body, and we do not represent any government or banking entity. Always check with the body concerned."
+            ]
+          },
+          {
+            "heading": "Your data",
+            "blocks": [
+              "You are responsible for the accuracy of what you enter. Your data is stored on your device; losing the device, uninstalling the app or resetting the account deletes it and we cannot recover it. Use report export if you want a copy."
+            ]
+          },
+          {
+            "heading": "Nabeeh Plus",
+            "blocks": [
+              {
+                "bullets": [
+                  "Price: {{monthlyPrice}} per month or {{yearlyPrice}} per year, including VAT.",
+                  "A {{trialDays}}-day free trial for eligible subscribers; Google Play decides whether you are eligible.",
+                  "The subscription renews automatically at the end of each period unless you cancel before the renewal date.",
+                  "Billing and refunds are handled by Google Play under its policies. To cancel: Google Play → Payments & subscriptions → Subscriptions, or the “Manage subscription” button in the Upgrade tab.",
+                  "After cancelling, Nabeeh Plus features remain until the end of the paid period."
+                ]
+              },
+              "Nabeeh Plus includes:",
+              {
+                "bullets": [
+                  "Unlimited savings goals (the free version holds {{freeGoals}} goals).",
+                  "Export of the current cycle’s report as PDF and CSV.",
+                  "Daily spending-limit alerts.",
+                  {
+                    "text": "Ad removal.",
+                    "onlyIf": "ads"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "heading": "Acceptable use",
+            "blocks": [
+              "Do not try to bypass the subscription or its verification, reverse-engineer the app or abuse our services."
+            ]
+          },
+          {
+            "heading": "Limitation of liability",
+            "blocks": [
+              "The app is provided “as is”. To the extent permitted by applicable law, we are not liable for any loss arising from relying on the app’s estimates or the payout dates shown, or from service interruptions. This does not affect any rights that cannot lawfully be waived."
+            ]
+          },
+          {
+            "heading": "Changes and discontinuation",
+            "blocks": [
+              "We may change the app or these terms, or discontinue some features, and will show the updated terms in the app. Continuing to use the app after an update means you accept it. This version is effective {{effectiveDate}}."
+            ]
+          },
+          {
+            "heading": "Governing law",
+            "blocks": [
+              "These terms are governed by the laws of the Kingdom of Saudi Arabia and its courts have jurisdiction over any dispute, without prejudice to your rights as a consumer."
+            ]
+          },
+          {
+            "heading": "Contact",
+            "blocks": [
+              "For any question: {{supportEmail}}."
+            ]
+          }
+        ]
+      }
+    },
+    "support": {
+      "ar": {
+        "title": "الدعم والمساعدة",
+        "intro": "يسعدنا مساعدتك. راسلنا على {{supportEmail}} وسنردّ في أقرب وقت.",
+        "sections": [
+          {
+            "heading": "كيف ألغي اشتراكي؟",
+            "blocks": [
+              "افتح Google Play ← الملف الشخصي ← المدفوعات والاشتراكات ← الاشتراكات ← {{appName}} بلس ← إلغاء الاشتراك. أو اضغط «إدارة الاشتراك» في تبويب الترقية داخل التطبيق. تبقى المزايا حتى نهاية الفترة المدفوعة."
+            ]
+          },
+          {
+            "heading": "اشتركت ولم تتفعّل المزايا",
+            "blocks": [
+              "تأكد من اتصالك بالإنترنت، ثم اضغط «استعادة المشتريات السابقة» في تبويب الترقية بنفس حساب Google الذي اشتركت به. إن استمرت المشكلة راسلنا مع رقم الطلب الموجود في إيصال Google Play."
+            ]
+          },
+          {
+            "heading": "غيّرت جهازي أو أعدت تثبيت التطبيق",
+            "blocks": [
+              "اضغط «استعادة المشتريات السابقة» بنفس حساب Google. أما بياناتك المالية فمحفوظة على الجهاز القديم ولا تنتقل تلقائياً إلى جهاز جديد."
+            ]
+          },
+          {
+            "heading": "كيف أحذف بياناتي؟",
+            "blocks": [
+              "من الإعدادات اضغط «تصفير الحساب والبدء من جديد» لحذف بياناتك من جهازك. ولحذف سجل الاشتراك لدينا راسلنا على {{supportEmail}}."
+            ]
+          },
+          {
+            "heading": "موعد الصرف المعروض غير صحيح",
+            "blocks": [
+              "نحدّث الجدول يدوياً من مصادر عامة وقد يحدث تأخر أو خطأ. راسلنا بالتصحيح مع المصدر إن أمكن وسنحدّثه."
+            ]
+          },
+          {
+            "heading": "الاسترداد",
+            "blocks": [
+              "تتم معالجة طلبات الاسترداد عبر Google Play وفق سياساتها، ويمكنك طلبه من سجل الطلبات في حسابك على Google Play."
+            ]
+          }
+        ]
+      },
+      "en": {
+        "title": "Support",
+        "intro": "We are happy to help. Email {{supportEmail}} and we will reply as soon as we can.",
+        "sections": [
+          {
+            "heading": "How do I cancel my subscription?",
+            "blocks": [
+              "Open Google Play → Profile → Payments & subscriptions → Subscriptions → {{appName}} Plus → Cancel subscription. Or tap “Manage subscription” in the Upgrade tab of the app. Plus features remain until the end of the paid period."
+            ]
+          },
+          {
+            "heading": "I subscribed but the features are not unlocked",
+            "blocks": [
+              "Check your internet connection, then tap “Restore previous purchases” in the Upgrade tab, using the same Google account you subscribed with. If the problem continues, email us with the order number from your Google Play receipt."
+            ]
+          },
+          {
+            "heading": "I changed phones or reinstalled the app",
+            "blocks": [
+              "Tap “Restore previous purchases” with the same Google account. Your financial data is stored on the old device and does not move to a new one automatically."
+            ]
+          },
+          {
+            "heading": "How do I delete my data?",
+            "blocks": [
+              "In Settings tap “Reset account and start over” to delete your data from your device. To delete the subscription record we hold, email {{supportEmail}}."
+            ]
+          },
+          {
+            "heading": "A payout date shown is wrong",
+            "blocks": [
+              "We update the schedule by hand from public sources, so delays or mistakes can happen. Email us the correction, with the source if possible, and we will update it."
+            ]
+          },
+          {
+            "heading": "Refunds",
+            "blocks": [
+              "Refunds are handled by Google Play under its policies; you can request one from the order history of your Google Play account."
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

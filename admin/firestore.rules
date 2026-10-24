@@ -1,0 +1,46 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    // The payout schedule: anyone (the app) may read it; only admins write.
+    match /config/payout_schedule {
+      allow read: if true;
+      allow create, update: if isAdmin()
+        && request.resource.data.keys().hasOnly(['programs', 'updatedAt', 'updatedBy'])
+        && request.resource.data.programs is list
+        && request.resource.data.programs.size() > 0
+        && request.resource.data.programs.size() <= 50
+        && request.resource.data.updatedAt == request.time
+        && request.resource.data.updatedBy is string;
+      allow delete: if false;
+    }
+
+    // Admin allow-list. Create documents here by hand in the console
+    // (document ID = the user's UID). Clients can only check their own entry.
+    match /admins/{uid} {
+      allow get: if request.auth != null && request.auth.uid == uid;
+      allow list, write: if false;
+    }
+
+    // Billing data is written only by the Cloud Function (Admin SDK, which
+    // bypasses these rules) and never read by clients: the app gets its
+    // entitlement from the function's reply. Closed explicitly so a future
+    // wildcard rule cannot open it by accident.
+    match /subscriptions/{id} {
+      allow read, write: if false;
+    }
+    match /entitlements/{uid} {
+      allow read, write: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

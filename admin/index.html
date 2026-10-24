@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>راتبي — إدارة مواعيد الصرف</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23004328'/%3E%3Cpath d='M9 11h14M9 16h14M9 21h8' stroke='%23a9f3c5' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="demo-banner" class="demo-banner" hidden>
+    وضع تجريبي — البيانات في الذاكرة فقط ولن تصل إلى أي مستخدم
+  </div>
+
+  <!-- Loading -->
+  <section id="view-loading" class="center-view" aria-live="polite">
+    <div class="spinner" aria-hidden="true"></div>
+    <p>جارٍ التحميل…</p>
+  </section>
+
+  <!-- Firebase not configured -->
+  <section id="view-setup" class="center-view" hidden>
+    <div class="panel narrow">
+      <h1>الإعداد مطلوب</h1>
+      <p>لم تُضف إعدادات Firebase بعد. افتح <code dir="ltr">admin/firebase-config.js</code> وألصق إعدادات تطبيق الويب من لوحة Firebase، ثم انشر الصفحة.</p>
+      <p>لتجربة الداشبورد الآن بدون Firebase افتح الرابط مع <code dir="ltr">?demo=1</code>.</p>
+      <a class="btn primary" href="?demo=1">فتح الوضع التجريبي</a>
+    </div>
+  </section>
+
+  <!-- Login -->
+  <section id="view-login" class="center-view" hidden>
+    <form id="login-form" class="panel narrow" novalidate>
+      <div class="brand brand-large"><span class="brand-mark" aria-hidden="true"></span><span>راتبي</span></div>
+      <h1>إدارة مواعيد الصرف</h1>
+      <p class="muted" id="login-hint">سجّل الدخول بحساب المشرف.</p>
+      <label class="field">
+        <span>البريد الإلكتروني</span>
+        <input id="login-email" type="email" dir="ltr" autocomplete="username" required>
+      </label>
+      <label class="field">
+        <span>كلمة المرور</span>
+        <input id="login-password" type="password" dir="ltr" autocomplete="current-password" required>
+      </label>
+      <p id="login-error" class="form-error" role="alert" hidden></p>
+      <button id="login-submit" class="btn primary block" type="submit">دخول</button>
+    </form>
+  </section>
+
+  <!-- Signed in but not an admin -->
+  <section id="view-denied" class="center-view" hidden>
+    <div class="panel narrow">
+      <h1>لا تملك صلاحية الإدارة</h1>
+      <p>تم تسجيل الدخول بالحساب <strong id="denied-email" dir="ltr"></strong> لكنه غير مضاف كمشرف. أضف المعرّف التالي كمستند في المجموعة <code dir="ltr">admins</code> من لوحة Firebase:</p>
+      <p><code id="denied-uid" dir="ltr" class="copyable"></code></p>
+      <button class="btn" id="denied-signout" type="button">تسجيل الخروج</button>
+    </div>
+  </section>
+
+  <!-- Main -->
+  <div id="view-main" hidden>
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark" aria-hidden="true"></span><span>راتبي · مواعيد الصرف</span></div>
+      <div class="topbar-user">
+        <span id="user-email" class="muted" dir="ltr"></span>
+        <button class="btn small" id="signout" type="button">خروج</button>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="status" aria-label="حالة الجدول">
+        <div>
+          <p id="status-published" class="status-line"></p>
+          <p id="status-dirty" class="status-dirty" hidden>
+            <span class="dot" aria-hidden="true"></span> تغييرات غير منشورة
+          </p>
+        </div>
+        <div class="status-actions">
+          <button class="btn" id="btn-revert" type="button" disabled>تراجع عن التغييرات</button>
+          <button class="btn primary" id="btn-publish" type="button" disabled>نشر التغييرات</button>
+        </div>
+      </section>
+
+      <section class="toolbar" aria-label="أدوات">
+        <button class="btn" id="btn-add" type="button">+ إضافة برنامج</button>
+        <button class="btn" id="btn-import" type="button" hidden>استيراد القائمة المدمجة في التطبيق</button>
+        <label class="preview-date">
+          <span>معاينة بتاريخ</span>
+          <input id="preview-date" type="date" dir="ltr">
+        </label>
+      </section>
+
+      <ul id="program-list" class="program-list" aria-label="برامج الصرف"></ul>
+      <p id="empty-state" class="empty" hidden>لا توجد برامج. أضف برنامجاً أو استورد القائمة المدمجة.</p>
+
+      <p class="foot-note">
+        المواعيد تُحسب بالتقويم الميلادي، وتُطبّق قاعدة العطلة تلقائياً: الجمعة ← الخميس، والسبت ← الأحد.
+        يصل التغيير إلى المستخدمين عند فتح التطبيق بعد مرور 24 ساعة على آخر تحديث لديهم أو عند سحب الشاشة للتحديث.
+      </p>
+    </main>
+  </div>
+
+  <!-- Add / edit -->
+  <dialog id="edit-dialog" aria-labelledby="edit-title">
+    <form id="edit-form" method="dialog" novalidate>
+      <h2 id="edit-title">برنامج</h2>
+
+      <label class="field">
+        <span>اسم البرنامج *</span>
+        <input id="f-title" maxlength="80" autocomplete="off">
+        <small class="err" data-err="title"></small>
+      </label>
+      <label class="field">
+        <span>الجهة</span>
+        <input id="f-provider" maxlength="160" autocomplete="off">
+        <small class="err" data-err="provider"></small>
+      </label>
+
+      <div class="row2">
+        <label class="field">
+          <span>التصنيف *</span>
+          <select id="f-category"></select>
+          <small class="err" data-err="category"></small>
+        </label>
+        <label class="field">
+          <span>النوع (الأيقونة)</span>
+          <select id="f-kind"></select>
+          <small class="err" data-err="kind"></small>
+        </label>
+      </div>
+
+      <fieldset class="field">
+        <legend>درجة التأكيد *</legend>
+        <label class="radio"><input type="radio" name="certainty" value="confirmed"> مؤكد (موعد رسمي معلن)</label>
+        <label class="radio"><input type="radio" name="certainty" value="expected"> متوقع (يختلف أو غير معلن)</label>
+      </fieldset>
+
+      <label class="check">
+        <input id="f-window" type="checkbox">
+        <span>موعد متغيّر: نافذة من يوم إلى يوم</span>
+      </label>
+
+      <div class="row2">
+        <label class="field">
+          <span id="f-day-label">يوم الصرف من الشهر *</span>
+          <input id="f-day" type="number" inputmode="numeric" min="1" max="31" dir="ltr">
+          <small class="err" data-err="dayOfMonth"></small>
+        </label>
+        <label class="field" id="f-end-wrap">
+          <span>آخر يوم في النافذة *</span>
+          <input id="f-end" type="number" inputmode="numeric" min="1" max="31" dir="ltr">
+          <small class="err" data-err="windowEndDay"></small>
+        </label>
+      </div>
+      <p class="hint" id="f-day-hint" hidden>في الأشهر الأقصر يُحتسب آخر يوم من الشهر.</p>
+
+      <label class="field">
+        <span>ملاحظة تظهر في البطاقة</span>
+        <input id="f-note" maxlength="160" autocomplete="off">
+        <small class="err" data-err="note"></small>
+      </label>
+      <label class="field" id="f-wnote-wrap">
+        <span>ملاحظة النافذة</span>
+        <input id="f-wnote" maxlength="160" autocomplete="off">
+        <small class="err" data-err="windowNote"></small>
+      </label>
+
+      <label class="field">
+        <span>المعرّف</span>
+        <input id="f-id" dir="ltr" autocomplete="off">
+        <small class="hint" id="f-id-hint">يُحفظ به تنبيه المستخدمين — لا يمكن تغييره بعد الإنشاء.</small>
+        <small class="err" data-err="id"></small>
+      </label>
+
+      <label class="check">
+        <input id="f-active" type="checkbox">
+        <span>ظاهر في التطبيق</span>
+      </label>
+
+      <div class="preview-box" aria-live="polite">
+        <strong>معاينة:</strong> <span id="f-preview">—</span>
+      </div>
+
+      <div class="dialog-actions">
+        <button class="btn primary" id="edit-save" type="submit">حفظ في المسودة</button>
+        <button class="btn" id="edit-cancel" type="button">إلغاء</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Confirm / info -->
+  <dialog id="confirm-dialog" aria-labelledby="confirm-title">
+    <form method="dialog">
+      <h2 id="confirm-title"></h2>
+      <div id="confirm-body"></div>
+      <div class="dialog-actions">
+        <button class="btn primary" id="confirm-ok" value="ok"></button>
+        <button class="btn" id="confirm-cancel" value="cancel">إلغاء</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
