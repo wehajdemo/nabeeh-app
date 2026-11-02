@@ -147,7 +147,10 @@ class LocalBudgetStore
   /// The payday up to which goal contributions have been credited.
   DateTime? _lastCreditedPayday;
 
-  void dispose() => _changes.close();
+  void dispose() {
+    _changes.close();
+    _saved.close();
+  }
 
   // ── Streams ─────────────────────────────────────────────────────────────
 
@@ -195,8 +198,25 @@ class LocalBudgetStore
     if (target == null) return;
     final cutoff = _clock().subtract(_ledgerRetention);
     _ledger.removeWhere((e) => e.createdAt.isBefore(cutoff));
-    await target.write(
-      StoreDataCodec.encode(
+    final raw = exportJson();
+    await target.write(raw);
+    if (!_saved.isClosed) _saved.add(raw);
+  }
+
+
+  // ── Backup (cloud copy and manual restore) ──────────────────────────────
+
+  final StreamController<String> _saved = StreamController<String>.broadcast();
+
+  /// The serialized state after every successful save. Used to mirror the
+  /// data to the user's account when they are signed in.
+  Stream<String> get saved => _saved.stream;
+
+  /// `true` once onboarding is done, i.e. there is something worth backing up.
+  bool get hasData => _profile != null;
+
+  /// The current state as the same JSON that is stored on the device.
+  String exportJson() => StoreDataCodec.encode(
         StoreData(
           profile: _profile,
           settings: _settings,
@@ -205,8 +225,26 @@ class LocalBudgetStore
           nextId: _nextId,
           lastCreditedPayday: _lastCreditedPayday,
         ),
-      ),
-    );
+      );
+
+  /// Replaces everything with [raw] (a backup made by [exportJson]).
+  /// Returns `false`, changing nothing, if [raw] is not a valid backup.
+  Future<bool> importJson(String raw) async {
+    final data = StoreDataCodec.decode(raw);
+    if (data == null) return false;
+    _profile = data.profile;
+    _settings = data.settings;
+    _goals
+      ..clear()
+      ..addAll(data.goals);
+    _ledger
+      ..clear()
+      ..addAll(data.ledger);
+    _nextId = data.nextId;
+    _lastCreditedPayday = data.lastCreditedPayday;
+    if (!_changes.isClosed) _changes.add(null);
+    await _persist();
+    return true;
   }
 
   String _newId(String prefix) => '$prefix-${_nextId++}';

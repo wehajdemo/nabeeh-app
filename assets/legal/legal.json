@@ -26,7 +26,7 @@
     "privacy": {
       "ar": {
         "title": "سياسة الخصوصية",
-        "intro": "توضّح هذه السياسة كيف يتعامل تطبيق {{appName}} مع بياناتك. بياناتك المالية تبقى على جهازك، ولا نطلب منك إنشاء حساب أو تسجيل الدخول.",
+        "intro": "توضّح هذه السياسة كيف يتعامل تطبيق {{appName}} مع بياناتك. بياناتك المالية تبقى على جهازك، وتسجيل الدخول اختياري. إذا سجّلت دخولك بحساب Google حفظنا نسخة منها في حسابك لتعود إليك على أي جهاز.",
         "sections": [
           {
             "heading": "من نحن",
@@ -35,9 +35,10 @@
             ]
           },
           {
-            "heading": "بياناتك المالية تبقى على جهازك",
+            "heading": "بياناتك المالية: على جهازك، ونسخة اختيارية في حسابك",
             "blocks": [
-              "الراتب الصافي، ويوم نزول الراتب، والالتزامات الشهرية، وأهداف الادخار، والمصاريف التي تسجّلها: كلها تُحفظ على جهازك فقط. لا نرسلها إلى خوادمنا ولا إلى أي جهة أخرى، ولا نستطيع الاطلاع عليها.",
+              "الراتب الصافي، ويوم نزول الراتب، والالتزامات الشهرية، وأهداف الادخار، والمصاريف التي تسجّلها: تُحفظ على جهازك. وما دمت لم تسجّل دخولك لا نرسلها إلى خوادمنا ولا إلى أي جهة أخرى، ولا نستطيع الاطلاع عليها.",
+              "عند تسجيل الدخول بحساب Google (اختياري، ومطلوب عند الاشتراك) تُحفظ نسخة من هذه البيانات في حسابك على خدمة Firebase (Cloud Firestore) التابعة لـ Google، ولا يصل إليها غيرك، وتُحدَّث تلقائياً مع كل تغيير حتى تعود إليك بعد تغيير الجهاز أو إعادة ضبطه. تقدر تحذف هذه النسخة في أي وقت من الإعدادات، أو تسجّل خروجك فتتوقف المزامنة",
               "عند تصدير تقرير (PDF أو CSV) يُنشأ الملف على جهازك، وأنت من يقرر مشاركته ومع من."
             ]
           },
@@ -47,7 +48,8 @@
               {
                 "bullets": [
                   "جدول مواعيد الصرف: يقرأ التطبيق من خدمة Firebase (Cloud Firestore) التابعة لـ Google جدولاً عاماً بمواعيد نزول الرواتب والدعومات. هذه بيانات عامة لا تتضمن شيئاً عنك، لكن أي اتصال بالإنترنت يكشف للخدمة عنوان IP ومعلومات تقنية عن الجهاز لازمة لإتمام الاتصال.",
-                  "الاشتراك في نبيه بلس: عند الاشتراك أو استعادة المشتريات يرسل التطبيق إلى خادمنا رمز الشراء ومعرّف المنتج الصادرين عن Google Play، مع معرّف مجهول ينشئه التطبيق عبر Firebase Authentication دون أي بيانات شخصية. نتحقق من الرمز لدى Google Play ونحفظ حالة الاشتراك وتاريخ انتهائه. لا نستلم بيانات بطاقتك المصرفية؛ يتم الدفع كلياً عبر Google Play.",
+                  "تسجيل الدخول والنسخة الاحتياطية: عند تسجيل الدخول بحساب Google نستلم معرّف حسابك وبريدك واسمك من Google، ونحفظ نسخة من بياناتك المالية (الراتب والالتزامات والأهداف والمصاريف وملاحظاتها) مرتبطة بحسابك فقط، وتُستخدم لاستعادتها لك لا غير.",
+                  "الاشتراك في نبيه بلس: عند الاشتراك أو استعادة المشتريات يرسل التطبيق إلى خادمنا رمز الشراء ومعرّف المنتج الصادرين عن Google Play، مع المعرّف الفريد لحسابك في Google (عبر Firebase Authentication)، ليرتبط الاشتراك بحسابك ويعود إليك على أي جهاز. نتحقق من الرمز لدى Google Play ونحفظ حالة الاشتراك وتاريخ انتهائه. لا نستلم بيانات بطاقتك المصرفية؛ يتم الدفع كلياً عبر Google Play.",
                   "التنبيهات: تُجدول على جهازك ولا تمر عبر أي خادم."
                 ]
               },
@@ -87,7 +89,7 @@
           {
             "heading": "الجهات التي تعالج البيانات",
             "blocks": [
-              "نعتمد على خدمات Google: Google Play (المدفوعات والاشتراكات) وFirebase (قاعدة البيانات والمصادقة المجهولة والدوال السحابية). تخضع معالجتها لشروط Google وسياساتها.",
+              "نعتمد على خدمات Google: Google Play (المدفوعات والاشتراكات) وFirebase (قاعدة البيانات وتسجيل الدخول والدوال السحابية). تخضع معالجتها لشروط Google وسياساتها.",
               {
                 "text": "وتُعرض الإعلانات عبر Google AdMob.",
                 "onlyIf": "ads"
@@ -100,6 +102,7 @@
               {
                 "bullets": [
                   "بيانات التطبيق على جهازك: تُحذف بالضغط على «تصفير الحساب والبدء من جديد» في الإعدادات، أو بإزالة التطبيق.",
+                  "النسخة المحفوظة في حسابك: تُحذف من الإعدادات ← «حذف النسخة المحفوظة في حسابي»، أو بمراسلتنا على {{supportEmail}}.",
                   "سجل الاشتراك على خادمنا (رمز الشراء والمعرّف المجهول وحالة الاشتراك): نحتفظ به ما دام ضرورياً لتقديم الاشتراك ولالتزاماتنا المحاسبية والنظامية. لطلب حذفه راسلنا على {{supportEmail}} مع ما يثبت الشراء. قد يؤدي حذفه إلى إيقاف مزايا نبيه بلس على ذلك الحساب."
                 ]
               }
@@ -133,7 +136,7 @@
       },
       "en": {
         "title": "Privacy Policy",
-        "intro": "This policy explains how {{appName}} handles your data. Your financial data stays on your device, and you do not need to create an account or sign in.",
+        "intro": "This policy explains how {{appName}} handles your data. Your financial data stays on your device, and signing in is optional. If you sign in with Google we keep a copy in your account so it comes back on any device.",
         "sections": [
           {
             "heading": "Who we are",
@@ -142,9 +145,10 @@
             ]
           },
           {
-            "heading": "Your financial data stays on your device",
+            "heading": "Your financial data: on your device, with an optional copy in your account",
             "blocks": [
-              "Your net salary, payday, monthly commitments, savings goals and the expenses you record are stored on your device only. We do not send them to our servers or to anyone else, and we cannot see them.",
+              "Your net salary, payday, monthly commitments, savings goals and the expenses you record are stored on your device. While you are not signed in we do not send them to our servers or to anyone else, and we cannot see them.",
+              "When you sign in with Google (optional, and required to subscribe) a copy of this data is saved to your account in Google’s Firebase service (Cloud Firestore). Only you can access it, and it is updated automatically with each change so it returns after you change or reset your device. You can delete the copy at any time in Settings, or sign out to stop syncing",
               "When you export a report (PDF or CSV) the file is created on your device, and you decide whether and with whom to share it."
             ]
           },
@@ -154,7 +158,8 @@
               {
                 "bullets": [
                   "Payout schedule: the app reads a public schedule of salary and benefit payout dates from Google’s Firebase service (Cloud Firestore). It contains nothing about you, but any internet connection reveals your IP address and technical device information to the service, as needed to complete the connection.",
-                  "Nabeeh Plus subscription: when you subscribe or restore purchases, the app sends our server the purchase token and product ID issued by Google Play, together with an anonymous ID created by Firebase Authentication that holds no personal data. We verify the token with Google Play and store the subscription status and end date. We never receive your card details; payment is handled entirely by Google Play.",
+                  "Sign-in and backup: when you sign in with Google we receive your account ID, e-mail and name from Google and store a copy of your financial data (salary, commitments, goals, expenses and their notes) linked only to your account, used only to restore it for you.",
+                  "Nabeeh Plus subscription: when you subscribe or restore purchases, the app sends our server the purchase token and product ID issued by Google Play, together with your Google account’s unique ID (through Firebase Authentication), so the subscription follows your account to any device. We verify the token with Google Play and store the subscription status and end date. We never receive your card details; payment is handled entirely by Google Play.",
                   "Reminders: scheduled on your device and never pass through a server."
                 ]
               },
@@ -194,7 +199,7 @@
           {
             "heading": "Who processes data for us",
             "blocks": [
-              "We rely on Google services: Google Play (payments and subscriptions) and Firebase (database, anonymous authentication and cloud functions). Their processing is governed by Google’s terms and policies.",
+              "We rely on Google services: Google Play (payments and subscriptions) and Firebase (database, sign-in and cloud functions). Their processing is governed by Google’s terms and policies.",
               {
                 "text": "Ads are served through Google AdMob.",
                 "onlyIf": "ads"
@@ -207,6 +212,7 @@
               {
                 "bullets": [
                   "App data on your device: deleted with “Reset account and start over” in Settings, or by uninstalling the app.",
+                  "Copy saved in your account: deleted in Settings → “Delete my saved copy”, or by e-mailing {{supportEmail}}.",
                   "Subscription record on our server (purchase token, anonymous ID and subscription status): kept as long as necessary to provide the subscription and meet our accounting and legal obligations. To ask for deletion, email {{supportEmail}} with proof of purchase. Deleting it may switch off Nabeeh Plus for that account."
                 ]
               }
@@ -265,7 +271,7 @@
           {
             "heading": "بياناتك",
             "blocks": [
-              "أنت مسؤول عن صحة ما تدخله. بياناتك محفوظة على جهازك؛ وفقدان الجهاز أو حذف التطبيق أو تصفير الحساب يؤدي إلى فقدانها ولا يمكننا استرجاعها. استخدم تصدير التقارير إن أردت نسخة منها."
+              "أنت مسؤول عن صحة ما تدخله. بياناتك محفوظة على جهازك؛ وفقدان الجهاز أو حذف التطبيق أو تصفير الحساب يؤدي إلى فقدانها ما لم تكن سجّلت دخولك فتعود من نسختك المحفوظة في حسابك. استخدم تصدير التقارير إن أردت نسخة إضافية."
             ]
           },
           {
@@ -351,7 +357,7 @@
           {
             "heading": "Your data",
             "blocks": [
-              "You are responsible for the accuracy of what you enter. Your data is stored on your device; losing the device, uninstalling the app or resetting the account deletes it and we cannot recover it. Use report export if you want a copy."
+              "You are responsible for the accuracy of what you enter. Your data is stored on your device; losing the device, uninstalling the app or resetting the account deletes it unless you signed in, in which case it returns from the copy saved in your account. Use report export if you want an extra copy."
             ]
           },
           {
@@ -433,13 +439,13 @@
           {
             "heading": "غيّرت جهازي أو أعدت تثبيت التطبيق",
             "blocks": [
-              "اضغط «استعادة المشتريات السابقة» بنفس حساب Google. أما بياناتك المالية فمحفوظة على الجهاز القديم ولا تنتقل تلقائياً إلى جهاز جديد."
+              "سجّل دخولك بنفس حساب Google: يعود اشتراكك وبياناتك المحفوظة في حسابك تلقائياً. وإن لم تكن سجّلت دخولك في الجهاز القديم فبياناتك المالية ما زالت عليه ولا تنتقل تلقائياً."
             ]
           },
           {
             "heading": "كيف أحذف بياناتي؟",
             "blocks": [
-              "من الإعدادات اضغط «تصفير الحساب والبدء من جديد» لحذف بياناتك من جهازك. ولحذف سجل الاشتراك لدينا راسلنا على {{supportEmail}}."
+              "من الإعدادات اضغط «تصفير الحساب والبدء من جديد» لحذف بياناتك من جهازك. ولحذف سجل الاشتراك أو نسختك المحفوظة في حسابك راسلنا على {{supportEmail}}."
             ]
           },
           {
@@ -475,13 +481,13 @@
           {
             "heading": "I changed phones or reinstalled the app",
             "blocks": [
-              "Tap “Restore previous purchases” with the same Google account. Your financial data is stored on the old device and does not move to a new one automatically."
+              "Sign in with the same Google account: your subscription and the data saved in your account return automatically. If you had not signed in on the old device, your financial data is still on that device and does not move by itself."
             ]
           },
           {
             "heading": "How do I delete my data?",
             "blocks": [
-              "In Settings tap “Reset account and start over” to delete your data from your device. To delete the subscription record we hold, email {{supportEmail}}."
+              "In Settings tap “Reset account and start over” to delete your data from your device. To delete the subscription record or the copy saved in your account, email {{supportEmail}}."
             ]
           },
           {

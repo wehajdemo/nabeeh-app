@@ -3,6 +3,9 @@ import 'package:flutter/foundation.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rateby/app.dart';
+import 'package:rateby/features/account/application/account_providers.dart';
+import 'package:rateby/features/account/data/firebase_account_service.dart';
+import 'package:rateby/features/account/data/firestore_cloud_backup.dart';
 import 'package:rateby/core/firebase/firebase_bootstrap.dart';
 import 'package:rateby/core/links/link_launcher.dart';
 import 'package:rateby/core/links/url_launcher_link_launcher.dart';
@@ -58,6 +61,10 @@ Future<void> main() async {
           subscriptionVerifierProvider.overrideWithValue(
             CloudFunctionsSubscriptionVerifier.firebase(),
           ),
+        if (!kIsWeb && firestore != null) ...[
+          accountServiceProvider.overrideWithValue(FirebaseAccountService()),
+          cloudBackupProvider.overrideWithValue(FirestoreCloudBackup(firestore)),
+        ],
         if (!kIsWeb)
           reminderSchedulerProvider.overrideWithValue(LocalNotificationsScheduler()),
         if (firestore != null)

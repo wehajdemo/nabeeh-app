@@ -5,6 +5,14 @@ import 'package:rateby/features/upgrade/domain/plus_entitlement.dart';
 import 'package:rateby/features/upgrade/domain/plus_plan.dart';
 import 'package:rateby/features/upgrade/domain/subscription_verifier.dart';
 
+/// Thrown when a purchase check is attempted without a Google sign-in.
+class SignInRequiredException implements Exception {
+  const SignInRequiredException();
+
+  @override
+  String toString() => 'SignInRequiredException';
+}
+
 /// Calls a Cloud Function by name with a JSON-like payload.
 typedef CallableInvoker = Future<Map<String, Object?>> Function(
   String name,
@@ -19,14 +27,19 @@ class CloudFunctionsSubscriptionVerifier implements SubscriptionVerifier {
   })  : _call = call,
         _ensureSignedIn = ensureSignedIn;
 
-  /// Production wiring: anonymous Firebase Auth + the deployed function.
+  /// Production wiring: the Google-signed-in Firebase user + the deployed
+  /// function. Anonymous users are not accepted (subscriptions follow the
+  /// Google account).
   factory CloudFunctionsSubscriptionVerifier.firebase() {
     final functions =
         FirebaseFunctions.instanceFor(region: BillingConfig.functionsRegion);
     return CloudFunctionsSubscriptionVerifier(
       ensureSignedIn: () async {
         final auth = FirebaseAuth.instance;
-        if (auth.currentUser == null) await auth.signInAnonymously();
+        final user = auth.currentUser;
+        if (user == null || user.isAnonymous) {
+          throw const SignInRequiredException();
+        }
       },
       call: (name, data) async {
         final result = await functions.httpsCallable(name).call<Object?>(data);

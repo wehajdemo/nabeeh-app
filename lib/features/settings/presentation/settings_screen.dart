@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rateby/features/account/presentation/cloud_account_section.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rateby/core/navigation/navigation_controller.dart';
 import 'package:rateby/core/theme/app_colors.dart';
@@ -180,6 +181,7 @@ class SettingsScreen extends ConsumerWidget {
               () => controller.setOfficialPayoutAlerts(v),
             ),
           ),
+          const CloudAccountSection(),
           AccountSection(
             plusMonthlyPrice: MoneyFormatter.format(PlusPlan.monthlyPrice),
             isPlus: isPlus,

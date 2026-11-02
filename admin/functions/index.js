@@ -39,6 +39,11 @@ function getService() {
 export const syncEntitlement = onCall(async (request) => {
   const uid = request.auth?.uid;
   if (!uid) throw new HttpsError('unauthenticated', 'Sign-in required.');
+  // Subscriptions belong to a Google account, so they follow the person to a
+  // new phone. Anonymous sessions (older builds) are not accepted.
+  if (request.auth?.token?.firebase?.sign_in_provider === 'anonymous') {
+    throw new HttpsError('unauthenticated', 'Google sign-in required.');
+  }
   const { productId, purchaseToken } = request.data ?? {};
   try {
     const { active, plan, expiresAtMs } = await getService().sync({

@@ -21,9 +21,9 @@ Package: `com.rateby.rateby` (technical id, never shown to users) · Version 1.0
 • مواعيد صرف الدعم والرواتب: تنبيهات تذكّرك قبل موعد النزول
 • تصدير تقريرك بصيغة PDF أو CSV
 • يدعم العربية بالكامل، والوضع الداكن
-• بياناتك المالية (الراتب والمصاريف والأهداف) تبقى على جهازك
+• بياناتك على جهازك، وتسجيل الدخول بحساب Google اختياري لحفظها واستعادتها على أي جهاز
 
-نبيه بلس (اشتراك اختياري):
+نبيه بلس (اشتراك اختياري، يتطلب تسجيل الدخول بحساب Google ليرجع لك على أي جهاز):
 • بدون إعلانات
 • تنبيهات الحد اليومي
 • أهداف غير محدودة وتصدير التقارير دائماً
@@ -48,7 +48,7 @@ Nabeeh splits your salary across the days until your next payday. Enter your sal
 • Payout-date reminders
 • PDF / CSV report export
 • Full Arabic (RTL) support and dark mode
-• Your financial data stays on your device
+• Your data stays on your device; signing in with Google is optional and keeps a copy you can restore on any device
 
 Nabeeh Plus (optional subscription): no ads, daily-limit alerts, unlimited goals and exports. 7-day free trial, then SAR 9/month or SAR 67/year. Cancel anytime in Google Play. The free version shows ads; you can also export one report by watching a rewarded ad.
 
@@ -66,13 +66,14 @@ Nabeeh Plus (optional subscription): no ads, daily-limit alerts, unlimited goals
 - **Ads:** Yes, contains ads (AdMob).
 - **Privacy policy URL:** https://rateby-app-sa.web.app/legal/privacy.html (live)
 - **Terms:** https://rateby-app-sa.web.app/legal/terms.html · **Support page:** https://rateby-app-sa.web.app/legal/support.html
-- **App access:** no login; everything is available without an account.
+- **App access:** no login required; every feature works without an account. Signing in with Google is optional (required only to subscribe).
 - **Target audience:** 18+ (financial app; not directed to children).
 - **Content rating:** no violence/sex/gambling/user-generated content → "Everyone". Financial category: does not facilitate loans, trading or money transfers.
 - **Data safety:**
-  - Salary, expenses, notes, goals, commitments: not collected (stay on the device).
+  - Financial info (salary, commitments, goals, expenses and notes): stored on the device; **collected only if the user signs in with Google** (optional cloud backup in Firebase, linked to the account, used only to restore the data; encrypted in transit; deletable in-app).
+  - Personal info: e-mail, name and user id (Google account), collected only when the user signs in; used for account management and the subscription.
   - Purchase history: collected, sent to our server for subscription verification, required for the subscription.
-  - Device or other IDs: collected — Firebase anonymous user id (subscription check only) and advertising ID (AdMob, shared with Google for advertising).
+  - Device or other IDs: collected — Firebase user id (account) and advertising ID (AdMob, shared with Google for advertising).
   - App interactions / diagnostics: collected by AdMob, shared for advertising.
   - Data encrypted in transit: Yes. Users can request deletion by e-mail (nibras.tech.sa@gmail.com) or in-app "Reset account".
 - **Advertising ID declaration:** Yes, used for advertising (AdMob).
@@ -85,6 +86,10 @@ Nabeeh Plus (optional subscription): no ads, daily-limit alerts, unlimited goals
 - Feature graphic 1024×500: `feature_graphic_1024x500.png`
 - Phone screenshots (Android, 1440×2880): `android/01-home.png` … `06-settings.png`
 - App Store (iPhone 6.9", 1320×2868) for later: `ios/`
+
+## Google sign-in (one-time setup, done in Firebase console)
+
+Authentication → Sign-in method → Google → Enable (support e-mail: nibras.tech.sa@gmail.com). SHA-1 of the upload key and the debug key are registered; after the first Play upload also add **App signing key certificate** SHA-1 from Play Console → Setup → App signing, then re-download `android/app/google-services.json`.
 
 ## Console steps
 

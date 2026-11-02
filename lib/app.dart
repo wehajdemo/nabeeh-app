@@ -6,6 +6,8 @@ import 'package:rateby/core/constants/app_strings.dart';
 import 'package:rateby/core/theme/app_colors.dart';
 import 'package:rateby/core/theme/app_theme.dart';
 import 'package:rateby/core/widgets/widgets.dart';
+import 'package:rateby/features/account/application/account_providers.dart';
+import 'package:rateby/features/account/presentation/backup_conflict_listener.dart';
 import 'package:rateby/features/budget/application/budget_providers.dart';
 import 'package:rateby/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:rateby/features/settings/application/appearance_providers.dart';
@@ -90,6 +92,9 @@ class AppGate extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(profileProvider);
+    // Alive for the whole session: mirrors data to the account and
+    // refreshes the subscription whenever someone signs in.
+    ref.watch(backupSyncProvider);
 
     return profile.when(
       skipLoadingOnReload: true,
@@ -100,7 +105,9 @@ class AppGate extends ConsumerWidget {
       data: (value) =>
           value == null
           ? const OnboardingScreen()
-          : const AppSyncListener(child: MainShell()),
+          : const BackupConflictListener(
+              child: AppSyncListener(child: MainShell()),
+            ),
     );
   }
 }

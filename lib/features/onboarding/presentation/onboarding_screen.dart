@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:rateby/features/account/presentation/account_strings.dart';
+import 'package:rateby/features/account/presentation/sign_in_prompt.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rateby/core/theme/app_colors.dart';
 import 'package:rateby/core/theme/app_spacing.dart';
@@ -76,6 +78,15 @@ class OnboardingScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
+                  if (step.isFirst)
+                    TextButton(
+                      onPressed: () => ensureSignedIn(
+                        context,
+                        ref,
+                        reason: SignInReason.restore,
+                      ),
+                      child: const Text(AccountStrings.haveAccount),
+                    ),
                   OnboardingFooter(
                     step: step,
                     canContinue: canContinue,

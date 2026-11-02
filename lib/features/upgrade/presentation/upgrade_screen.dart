@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rateby/features/account/presentation/sign_in_prompt.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rateby/core/theme/app_colors.dart';
 import 'package:rateby/core/theme/app_spacing.dart';
@@ -58,6 +59,17 @@ class _UpgradeScreenState extends ConsumerState<UpgradeScreen> {
     }
   }
 
+  /// Subscribing and restoring are tied to the Google account, so ask the
+  /// person to sign in first (it is optional everywhere else).
+  Future<void> _runSignedIn(
+    SignInReason reason,
+    Future<PurchaseResult> Function() action,
+  ) async {
+    if (!await ensureSignedIn(context, ref, reason: reason)) return;
+    if (!mounted) return;
+    await _run(action);
+  }
+
   void _show(String message) {
     if (!mounted) return;
     ScaffoldMessenger.of(context)
@@ -99,8 +111,9 @@ class _UpgradeScreenState extends ConsumerState<UpgradeScreen> {
         const _Benefits(),
         SubscribeFooter(
           isBusy: _isBusy,
-          onSubscribe: () => _run(controller.subscribe),
-          onRestore: () => _run(controller.restorePurchases),
+          onSubscribe: () => _runSignedIn(SignInReason.subscribe, controller.subscribe),
+          onRestore: () =>
+              _runSignedIn(SignInReason.restore, controller.restorePurchases),
           onTerms: () => openLegal(context, LegalKind.terms),
           onPrivacy: () => openLegal(context, LegalKind.privacy),
           onSupport: () => openLegal(context, LegalKind.support),

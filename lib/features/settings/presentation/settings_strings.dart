@@ -52,7 +52,7 @@ abstract final class SettingsStrings {
   static const String termsSubtitle = 'الاشتراك، مواعيد الصرف، حدود المسؤولية';
   static const String supportTitle = 'الدعم والمساعدة';
   static const String supportSubtitle = 'أسئلة شائعة وتواصل معنا';
-  static const String privacySubtitle = 'بياناتك المالية تبقى محفوظة على جهازك';
+  static const String privacySubtitle = 'بياناتك على جهازك، ونسخة اختيارية في حسابك';
   static const String aboutTitle = 'عن تطبيق نبيه';
   static const String aboutSubtitle = 'النسخة الرسمية';
   static String versionTag(String v) => 'v$v';

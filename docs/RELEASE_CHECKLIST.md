@@ -185,3 +185,9 @@ flutter build appbundle --dart-define-from-file=config/release.defines.json
 * Build needs macOS: use Codemagic with `codemagic.yaml` (no Mac), or `flutter build ipa --dart-define-from-file=config/release.ios.defines.json` on a Mac.
 * Needs an Apple Developer account (99 USD/year) and the app created in App Store Connect.
 * Subscriptions on iOS are **not** wired yet (the server only verifies Google Play): the iPhone build shows ads and keeps Plus unavailable.
+
+## Google sign-in and cloud backup
+
+* Optional sign-in (Google) is required only to subscribe. Subscribers' purchases are keyed by the Google account uid, so they follow the person to a new phone.
+* Signed-in users get an automatic copy of their budget data at `users/{uid}/backup/latest` (rules in `admin/firestore.rules`). Privacy policy and Data safety already describe it.
+* Setup: Firebase console → Authentication → Google → Enable. Android: register SHA-1 of the upload key, the debug key **and the Play App Signing key** (Play Console → Setup → App signing), then re-download `google-services.json`. iOS: add the `REVERSED_CLIENT_ID` URL scheme to `ios/Runner/Info.plist` and build with `--dart-define=GOOGLE_IOS_CLIENT_ID=<client id>`.

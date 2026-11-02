@@ -49,7 +49,7 @@ abstract final class OnboardingStrings {
       };
 
   // Footer
-  static const String privacyNote = 'بياناتك المالية مشفرة ومحفوظة على جهازك فقط';
+  static const String privacyNote = 'بياناتك على جهازك، والدخول اختياري';
   static const String continueNext = 'متابعة للخطوة التالية';
   static const String continueLast = 'متابعة للخطوة الأخيرة';
   static const String start = 'بدء استخدام نبيه الآن ✨';

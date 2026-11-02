@@ -44,7 +44,7 @@ void main() {
 
     expect(find.text('سياسة الخصوصية'), findsOneWidget); // app bar
     expect(find.text('من نحن'), findsOneWidget);
-    expect(find.text('بياناتك المالية تبقى على جهازك'), findsOneWidget);
+    expect(find.text('بياناتك المالية: على جهازك، ونسخة اختيارية في حسابك'), findsOneWidget);
     expect(find.textContaining('تاريخ السريان:'), findsWidgets);
   });
 

@@ -28,6 +28,24 @@ service cloud.firestore {
       allow list, write: if false;
     }
 
+    // Optional cloud copy of the person's budget data: only that person,
+    // signed in with Google (not anonymous), can read or write it. One
+    // document, a single JSON string, capped below Firestore's 1 MiB limit.
+    match /users/{uid}/backup/{doc} {
+      allow read, delete: if request.auth != null
+        && request.auth.uid == uid
+        && request.auth.token.firebase.sign_in_provider != 'anonymous';
+      allow create, update: if request.auth != null
+        && request.auth.uid == uid
+        && request.auth.token.firebase.sign_in_provider != 'anonymous'
+        && doc == 'latest'
+        && request.resource.data.keys().hasOnly(['payload', 'updatedAtMs', 'schema'])
+        && request.resource.data.payload is string
+        && request.resource.data.payload.size() < 900000
+        && request.resource.data.updatedAtMs is int
+        && request.resource.data.schema == 1;
+    }
+
     // Billing data is written only by the Cloud Function (Admin SDK, which
     // bypasses these rules) and never read by clients: the app gets its
     // entitlement from the function's reply. Closed explicitly so a future
