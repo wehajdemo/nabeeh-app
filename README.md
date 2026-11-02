@@ -1,21 +1,21 @@
-# راتبي — Rateby (Flutter)
+# نبيه — Nabeeh (Flutter)
 
-Salary-cycle budgeting app for Saudi Arabia, converted from the Stitch export. **All screens are built:**
-Onboarding (3 steps) · Home · Add Expense · Goals (with balances) · Payments (payout dates) · Upgrade (راتبي بلس) ·
-Settings · Privacy policy / Terms / Support. Plus: local reminders, PDF/CSV export, and Google Play subscriptions
-verified by a Cloud Function.
+Salary-cycle budgeting app for Saudi Arabia. **All screens are built:**
+Onboarding (3 steps) · Home · Add Expense · Goals (with balances) · Payments (payout dates) · Upgrade (نبيه بلس) ·
+Settings · Privacy policy / Terms / Support. Plus: local reminders, PDF/CSV export, optional Google sign-in with a
+cloud backup, and Google Play subscriptions verified by a Cloud Function.
 
-> ⚠️ **Not compiled yet.** This was written without a Flutter SDK available, so it has passed static checks
-> only (syntax parse, import resolution, token/constructor-argument cross-checks) — never `flutter analyze`
-> or `flutter test`. Run the commands below first and expect to fix a handful of small compile errors.
-> Billing, notifications and the Cloud Function have never run against Google Play / a device / a Firebase project;
-> follow **docs/RELEASE_CHECKLIST.md** before shipping. (The Node tests for the function and the dashboard do run.)
+> **Status:** `flutter analyze` reports no errors or warnings and all 223 Flutter tests pass (2 November 2026).
+> Billing, notifications and the Cloud Function are covered by the on-device pass in
+> **docs/RELEASE_CHECKLIST.md**, which is the list to follow before shipping.
+>
+> The app started under the working name Rateby, which remains in technical ids only (`rateby` package,
+> `com.rateby.rateby`, the `rateby_plus_*` product ids and the Firebase project).
 
 ## Run it
 
 ```bash
-cd rateby
-flutter create . --platforms=android,web   # adds the missing platform folders (no Mac needed)
+cd nabeeh_app
 flutter pub get
 flutter analyze
 flutter test
@@ -23,7 +23,6 @@ flutter run
 dart format .
 ```
 
-`flutter create .` only adds what is missing; check that `lib/`, `test/` and `pubspec.yaml` are untouched afterwards.
 Requires Flutter ≥ 3.27 (Dart ≥ 3.6) and `flutter_riverpod` 2.x (not 3.x).
 
 ## Firebase
@@ -33,10 +32,11 @@ Firebase is optional at runtime: until it is configured the app silently uses th
 Setup (project, rules, first admin, `flutterfire configure`) is a short checklist in **admin/README.md**; the Play
 Console / functions / legal-pages steps are in **docs/RELEASE_CHECKLIST.md**.
 
-The app reads one document, `config/payout_schedule` (at most once per 24 h, cached). For subscriptions it signs in
-anonymously and calls the `syncEntitlement` function; clients never read or write purchase data directly.
+The app reads one document, `config/payout_schedule` (at most once per 24 h, cached). Signing in with Google is
+optional and required only to subscribe; the app then calls the `syncEntitlement` function, and clients never read or
+write purchase data directly.
 
-## Subscriptions (راتبي بلس)
+## Subscriptions (نبيه بلس)
 
 ```
 Play Billing ─ in_app_purchase ─▶ PlayBillingGateway ─ purchase token ─▶ syncEntitlement (Cloud Function)
@@ -48,7 +48,7 @@ Play Billing ─ in_app_purchase ─▶ PlayBillingGateway ─ purchase token �
   store re-delivers it on the next launch.
 * The app re-checks on start/resume (≥15 min apart, only for people who ever subscribed). Offline, the cached
   entitlement works until its end date.
-* One purchase unlocks one account at a time: restoring on a new install moves it to the new anonymous account.
+* One purchase unlocks one account at a time; signing in with the same Google account brings it back on a new phone.
 * **What Plus gates** (one place to change: `features/upgrade/domain/plus_gate.dart`): more than
   `PlusLimits.freeGoalCount` (3) goals, PDF/CSV export, daily-limit alerts. Payout-date alerts stay free.
   Ads are removed for subscribers (`showAdsProvider`).
@@ -77,6 +77,7 @@ lib/
                   AppTextField, AppSwitch, SettingsTile/Group, ChoiceChipBar, StepProgressBar,
                   DashedBorderButton, app bottom sheet, AppToast, ScreenBody, ...
   features/
+    account/      optional Google sign-in (AccountService) · cloud backup in Firestore (CloudBackup) · sign-in prompt
     budget/       shared kernel
                   domain/       entities (BudgetProfile, SavingsGoal, FixedExpense, AppSettings, ...),
                                 repository interfaces (Budget / Profile / Goals / Settings),
@@ -126,7 +127,7 @@ Tests (`test/`): money, salary cycle, daily allowance, daily-limit calculator, k
 goals, payout schedule, payout schedule codec + remote repository (fallback, cache, staleness, offline),
 payments controller, persistence/codec, and widget flows (onboarding → home, all tabs, reset).
 Also: goal balances and payday crediting, reminder planner/sync, report/CSV/PDF/export gating, billing gateway,
-server-response parsing, entitlement refresh, Plus limits, legal content and screens.
+server-response parsing, entitlement refresh, Plus limits, legal content and screens, cloud backup sync.
 Dashboard logic + Firebase adapter + legal pages: `cd admin && npm test`; billing function: `cd admin/functions && npm install && npm test`;
 security rules (emulator): `cd admin && npm run test:rules`.
 App-side Firestore source is tested with `fake_cloud_firestore`.
@@ -148,16 +149,14 @@ App-side Firestore source is tested with `fake_cloud_firestore`.
 
 ## Known limitations
 
-* **Nothing involving a device, Google Play or Firebase has been run.** Static checks and the Node tests pass; the
-  Flutter code has never been through `flutter analyze` / `flutter test`, and the billing, notification and export
-  paths need the on-device pass in `docs/RELEASE_CHECKLIST.md` §7.
-* **Dashboard sign-in is Firebase Auth + an `admins/{uid}` allow-list**; the Firebase adapter and the security rules
-  have not been run against a real project / the emulator.
+* **On-device checks:** the billing, notification and export paths need the on-device pass in
+  `docs/RELEASE_CHECKLIST.md` §7.
+* **Dashboard sign-in is Firebase Auth + an `admins/{uid}` allow-list.**
 * **Reminders** are one-shot local notifications for the next few days (payout: evening before + morning of; daily
   limit: 09:00), rebuilt on every app start/resume and whenever settings, goals or the schedule change. They use
   inexact alarms (can be minutes late) and are only refreshed when the app is opened; if it is not opened for more
   than ~3 days the queued ones run out. No notifications on web.
-* **Ads:** one AdMob banner above the bottom bar for free users (Android only, Google test ads until you set real ids
+* **Ads:** one AdMob banner above the bottom bar for free users (Android and iOS, Google test ads until you set real ids
   — see the checklist). Not implemented: interstitials/rewarded ads, ad-free grace on first launch.
 * **Dark mode** (Settings → المظهر: follow phone / light / dark) is built from two explicit palettes
   (`AppPalette.light` / `.dark`). Colors are read from a global (`AppColors.x`), so switching rebuilds the whole
@@ -167,7 +166,8 @@ App-side Firestore source is tested with `fake_cloud_firestore`.
   a device yet — expect to tweak a few spots. The legal pages are a starting text, not legal advice.
 * **Storage** is `shared_preferences` JSON on the device — fine for a prototype, not encrypted. For production
   swap in Drift/Isar (+ `flutter_secure_storage` for sensitive values) behind the same repository interfaces.
-  There is no cloud backup: losing the phone loses the data (the terms say so).
+  Signed-in people get a copy in Firestore that follows them to a new phone; without signing in, losing the phone
+  loses the data.
 * **User name** on Home is a placeholder (`features/profile`).
 * Expenses older than 62 days are pruned when saving (only today's spending affects the limit). Export covers the
   current salary cycle only.
