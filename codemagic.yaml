@@ -33,9 +33,9 @@ workflows:
         # Numeric Apple ID of the app (App Store Connect -> App Information).
         # Optional: only used to continue TestFlight build numbers.
         APP_STORE_APPLE_ID: "6831252529"
-        # Optional: OAuth client id of the iOS app, to offer Google sign-in on
-        # the iPhone next to Sign in with Apple. Empty = Apple only.
-        GOOGLE_IOS_CLIENT_ID: ""
+        # Optional: add GOOGLE_IOS_CLIENT_ID (OAuth client id of the iOS app)
+        # here to offer Google sign-in on the iPhone next to Sign in with
+        # Apple. Not set = Apple only. (Codemagic rejects empty values.)
     scripts:
       - name: Get packages
         script: flutter pub get
