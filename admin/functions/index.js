@@ -30,8 +30,8 @@ const appleBundleId = defineString('APPLE_BUNDLE_ID', {
 // Numeric Apple ID of the app (App Store Connect → App Information). Needed
 // only for production purchases; TestFlight and App Review use the sandbox.
 const appleAppId = defineString('APPLE_APP_ID', {
-  default: '',
-  description: 'Numeric Apple ID of the app in App Store Connect (empty = sandbox only)',
+  default: '0',
+  description: 'Numeric Apple ID of the app in App Store Connect (0 = sandbox only)',
 });
 
 initializeApp();

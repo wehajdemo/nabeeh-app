@@ -188,7 +188,7 @@ flutter build appbundle --dart-define-from-file=config/release.defines.json
 * Subscriptions on iOS use StoreKit 2 with the same product ids (`rateby_plus_monthly`, `rateby_plus_yearly`). The app sends the
   signed transaction (JWS) to `syncEntitlement` with `store: "apple"`; the function checks Apple's signature against
   `admin/functions/certs/AppleRootCA-G3.cer` (no App Store Connect key needed). Sandbox (TestFlight, App Review) is accepted;
-  production purchases need the `APPLE_APP_ID` parameter (numeric Apple ID) at deploy time.
+  production purchases need `APPLE_APP_ID` (numeric Apple ID) in `admin/functions/.env`; `0` = sandbox only.
 * Renewals, expiry and refunds reach the server through App Store Server Notifications V2: set the URL of the
   `appStoreNotifications` function in App Store Connect. Without it, the app still updates on launch.
 * Sign in with Apple is offered on iPhone (Apple guideline 4.8); Google sign-in appears there only when
