@@ -167,6 +167,21 @@ class BackupSyncController extends Notifier<BackupState> {
     }
   }
 
+  /// Deletes the account: its copy of the data first (only the signed-in
+  /// person may delete it), then the account itself. The server removes the
+  /// rest (subscription records). The phone's data stays.
+  ///
+  /// `false` when the person cancelled; throws when the deletion failed.
+  Future<bool> deleteAccount() async {
+    final user = _user;
+    if (user == null) return true;
+    _timer?.cancel();
+    await ref.read(cloudBackupProvider).delete(user.uid);
+    final deleted = await ref.read(accountServiceProvider).deleteAccount();
+    if (deleted) await ref.read(entitlementProvider.notifier).clear();
+    return deleted;
+  }
+
   /// Deletes the account copy (the phone's data stays).
   Future<bool> deleteCloudCopy() async {
     final user = _user;

@@ -12,7 +12,11 @@ class AccountUser {
   final String? name;
 }
 
-/// Sign-in boundary (Google account, through Firebase Auth).
+/// Ways to sign in. Apple's guidelines require "Sign in with Apple" on the
+/// iPhone wherever another account sign-in is offered.
+enum SignInMethod { apple, google }
+
+/// Sign-in boundary (Apple or Google account, through Firebase Auth).
 abstract interface class AccountService {
   /// `null` while signed out.
   AccountUser? get currentUser;
@@ -20,11 +24,20 @@ abstract interface class AccountService {
   /// Emits the current user and every later change.
   Stream<AccountUser?> get changes;
 
-  /// Opens Google's account picker. `null` when the person cancels.
+  /// The sign-in methods this build offers, in the order to show them.
+  /// Empty where accounts do not exist.
+  List<SignInMethod> get methods;
+
+  /// Opens the provider's sign-in sheet. `null` when the person cancels.
   /// Throws [AccountException] when sign-in fails.
-  Future<AccountUser?> signInWithGoogle();
+  Future<AccountUser?> signIn(SignInMethod method);
 
   Future<void> signOut();
+
+  /// Deletes the account itself. The provider may ask the person to confirm
+  /// who they are first. Returns `false` when they cancel that step.
+  /// Throws [AccountException] when the deletion fails.
+  Future<bool> deleteAccount();
 }
 
 class AccountException implements Exception {
@@ -47,9 +60,15 @@ class NoAccountService implements AccountService {
   Stream<AccountUser?> get changes => const Stream.empty();
 
   @override
-  Future<AccountUser?> signInWithGoogle() async =>
+  List<SignInMethod> get methods => const [];
+
+  @override
+  Future<AccountUser?> signIn(SignInMethod method) async =>
       throw const AccountException('Accounts are not available in this build');
 
   @override
   Future<void> signOut() async {}
+
+  @override
+  Future<bool> deleteAccount() async => false;
 }

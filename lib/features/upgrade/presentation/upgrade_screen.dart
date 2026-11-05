@@ -59,7 +59,7 @@ class _UpgradeScreenState extends ConsumerState<UpgradeScreen> {
     }
   }
 
-  /// Subscribing and restoring are tied to the Google account, so ask the
+  /// Subscribing and restoring are tied to the account, so ask the
   /// person to sign in first (it is optional everywhere else).
   Future<void> _runSignedIn(
     SignInReason reason,

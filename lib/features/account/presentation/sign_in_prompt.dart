@@ -17,8 +17,8 @@ enum SignInReason {
 
 /// Makes sure somebody is signed in. Returns `true` when someone is.
 ///
-/// Asks first (so Google's picker never appears out of nowhere), then opens
-/// the Google account picker.
+/// Asks first (so the provider's sheet never appears out of nowhere) with
+/// one button per sign-in method, then opens that provider's sheet.
 Future<bool> ensureSignedIn(
   BuildContext context,
   WidgetRef ref, {
@@ -26,28 +26,38 @@ Future<bool> ensureSignedIn(
 }) async {
   if (ref.read(accountUserProvider).valueOrNull != null) return true;
 
-  final agreed = await showDialog<bool>(
+  final service = ref.read(accountServiceProvider);
+  final messenger = ScaffoldMessenger.of(context);
+  if (service.methods.isEmpty) {
+    messenger.showSnackBar(
+      const SnackBar(content: Text(AccountStrings.signInFailed)),
+    );
+    return false;
+  }
+
+  final method = await showDialog<SignInMethod>(
     context: context,
     builder: (context) => AlertDialog(
       title: const Text(AccountStrings.signInTitle),
       content: Text(reason.body),
+      actionsOverflowDirection: VerticalDirection.up,
       actions: [
         TextButton(
-          onPressed: () => Navigator.pop(context, false),
+          onPressed: () => Navigator.pop(context),
           child: const Text(AccountStrings.notNow),
         ),
-        FilledButton(
-          onPressed: () => Navigator.pop(context, true),
-          child: const Text(AccountStrings.continueWithGoogle),
-        ),
+        for (final method in service.methods)
+          _MethodButton(
+            method: method,
+            onPressed: () => Navigator.pop(context, method),
+          ),
       ],
     ),
   );
-  if (agreed != true || !context.mounted) return false;
+  if (method == null || !context.mounted) return false;
 
-  final messenger = ScaffoldMessenger.of(context);
   try {
-    final user = await ref.read(accountServiceProvider).signInWithGoogle();
+    final user = await service.signIn(method);
     if (user != null && context.mounted) {
       AppToast.show(context, AccountStrings.signedIn);
     }
@@ -58,4 +68,29 @@ Future<bool> ensureSignedIn(
     );
     return false;
   }
+}
+
+class _MethodButton extends StatelessWidget {
+  const _MethodButton({required this.method, required this.onPressed});
+
+  final SignInMethod method;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) => switch (method) {
+        // Apple's style: a black button with the Apple logo.
+        SignInMethod.apple => FilledButton.icon(
+            style: FilledButton.styleFrom(
+              backgroundColor: Colors.black,
+              foregroundColor: Colors.white,
+            ),
+            onPressed: onPressed,
+            icon: const Icon(Icons.apple),
+            label: const Text(AccountStrings.continueWithApple),
+          ),
+        SignInMethod.google => FilledButton(
+            onPressed: onPressed,
+            child: const Text(AccountStrings.continueWithGoogle),
+          ),
+      };
 }

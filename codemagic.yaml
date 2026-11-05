@@ -1,11 +1,14 @@
 # Builds the iPhone app in the cloud (no Mac needed) and sends it to TestFlight.
-# One-time setup in Codemagic (codemagic.io, free tier ~500 build-min/month):
-#   1. Add this repository (or upload the project folder).
+# Step-by-step setup (Arabic): docs/APP_STORE_SETUP.md. In short:
+#   1. Codemagic (codemagic.io): add this GitHub repository.
 #   2. Teams -> Integrations -> App Store Connect: add an API key from
 #      App Store Connect (Users and Access -> Integrations -> Keys). Name it
-#      `nabeeh_asc` below.
+#      `nabeeh_asc`. The key stays in Codemagic, never in this repository.
 #   3. Code signing identities: let Codemagic create the distribution
-#      certificate and App Store profile for bundle id com.rateby.rateby.
+#      certificate and App Store profile for bundle id com.rateby.rateby
+#      (the App ID needs the "Sign in with Apple" capability first).
+# A build starts by itself when a tag named ios-* is pushed
+# (for example ios-1.0.0-1), or by hand from the Codemagic dashboard.
 workflows:
   ios-release:
     name: Nabeeh iOS release
@@ -13,6 +16,12 @@ workflows:
     instance_type: mac_mini_m2
     integrations:
       app_store_connect: nabeeh_asc
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: 'ios-*'
+          include: true
     environment:
       flutter: stable
       xcode: latest
@@ -21,21 +30,43 @@ workflows:
         distribution_type: app_store
         bundle_identifier: com.rateby.rateby
       vars:
-        APP_STORE_APPLE_ID: "0000000000" # numeric Apple ID of the app in App Store Connect
+        # Numeric Apple ID of the app (App Store Connect -> App Information).
+        # Optional: only used to continue TestFlight build numbers.
+        APP_STORE_APPLE_ID: ""
+        # Optional: OAuth client id of the iOS app, to offer Google sign-in on
+        # the iPhone next to Sign in with Apple. Empty = Apple only.
+        GOOGLE_IOS_CLIENT_ID: ""
     scripts:
       - name: Get packages
         script: flutter pub get
-      - name: Install pods
+      - name: Google sign-in URL scheme (only when a client id is set)
         script: |
-          cd ios && pod install
+          if [ -n "$GOOGLE_IOS_CLIENT_ID" ]; then
+            REVERSED=$(echo "$GOOGLE_IOS_CLIENT_ID" | awk -F. '{for(i=NF;i>0;i--) printf "%s%s",$i,(i>1?".":"")}')
+            PLIST=ios/Runner/Info.plist
+            /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes array" "$PLIST"
+            /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:0 dict" "$PLIST"
+            /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:0:CFBundleURLSchemes array" "$PLIST"
+            /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:0:CFBundleURLSchemes:0 string $REVERSED" "$PLIST"
+          fi
       - name: Apply signing
         script: xcode-project use-profiles
       - name: Build IPA
         script: |
-          BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_STORE_APPLE_ID" 2>/dev/null || echo 0) + 1))
+          LATEST=0
+          if [ -n "$APP_STORE_APPLE_ID" ]; then
+            LATEST=$(app-store-connect get-latest-testflight-build-number "$APP_STORE_APPLE_ID" 2>/dev/null || echo 0)
+          fi
+          case "$LATEST" in ''|*[!0-9]*) LATEST=0 ;; esac
+          NEXT=$BUILD_NUMBER
+          if [ "$LATEST" -ge "$NEXT" ]; then NEXT=$((LATEST + 1)); fi
+          GOOGLE_DEFINE=""
+          if [ -n "$GOOGLE_IOS_CLIENT_ID" ]; then
+            GOOGLE_DEFINE="--dart-define=GOOGLE_IOS_CLIENT_ID=$GOOGLE_IOS_CLIENT_ID"
+          fi
           flutter build ipa --release \
-            --build-name=1.0.0 --build-number=$BUILD_NUMBER \
-            --dart-define-from-file=config/release.ios.defines.json \
+            --build-name=1.0.0 --build-number=$NEXT \
+            --dart-define-from-file=config/release.ios.defines.json $GOOGLE_DEFINE \
             --export-options-plist=/Users/builder/export_options.plist
     artifacts:
       - build/ios/ipa/*.ipa

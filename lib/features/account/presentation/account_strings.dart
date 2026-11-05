@@ -1,6 +1,6 @@
 /// Copy for sign-in and the account copy of the budget data.
 abstract final class AccountStrings {
-  static const String signInTitle = 'سجّل دخولك بحساب Google';
+  static const String signInTitle = 'سجّل دخولك';
   static const String signInBodySubscribe =
       'الاشتراك يُربط بحسابك، فيرجع لك اشتراكك وبياناتك على أي جهاز جديد أو بعد إعادة ضبط الجوال.';
   static const String signInBodyRestore =
@@ -8,6 +8,7 @@ abstract final class AccountStrings {
   static const String signInBodyOptional =
       'اختياري: عند تسجيل الدخول تُحفظ ميزانيتك ومصاريفك وأهدافك في حسابك، وترجع لك على أي جهاز.';
   static const String continueWithGoogle = 'المتابعة بحساب Google';
+  static const String continueWithApple = 'المتابعة مع Apple';
   static const String notNow = 'ليس الآن';
   static const String signInFailed = 'تعذّر تسجيل الدخول، حاول مرة أخرى';
   static const String signedIn = 'تم تسجيل الدخول';
@@ -17,7 +18,7 @@ abstract final class AccountStrings {
 
   // Settings
   static const String section = 'الحساب والنسخ الاحتياطي';
-  static const String signInTile = 'تسجيل الدخول بحساب Google';
+  static const String signInTile = 'تسجيل الدخول';
   static const String signInTileSubtitle =
       'اختياري، لحفظ بياناتك واشتراكك على أي جهاز';
   static String signedInAs(String who) => 'مسجّل باسم $who';
@@ -34,6 +35,13 @@ abstract final class AccountStrings {
   static const String delete = 'حذف';
   static const String cloudDeleted = 'تم حذف النسخة المحفوظة';
   static const String cloudDeleteFailed = 'تعذّر الحذف، حاول مرة أخرى';
+  static const String deleteAccount = 'حذف الحساب';
+  static const String deleteAccountSubtitle =
+      'يحذف حسابك ونسختك المحفوظة نهائياً';
+  static const String deleteAccountConfirm =
+      'سنحذف حسابك ونسختك المحفوظة فيه نهائياً، ولا يمكن التراجع. بياناتك على هذا الجهاز تبقى.\n\nإذا كان عندك اشتراك في نبيه بلس فهو لا يُلغى تلقائياً: ألغه من إعدادات اشتراكات Apple أو Google Play.';
+  static const String accountDeleted = 'تم حذف حسابك';
+  static const String accountDeleteFailed = 'تعذّر حذف الحساب، حاول مرة أخرى';
 
   // Conflict
   static const String conflictTitle = 'وجدنا نسخة محفوظة في حسابك';

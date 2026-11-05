@@ -32,5 +32,14 @@ export function createFirestoreStore(db) {
     async putEntitlement(uid, entitlement) {
       await entitlements.doc(uid).set(entitlement);
     },
+
+    async deleteAccountData(uid) {
+      const owned = await tokens.where('uid', '==', uid).get();
+      const batch = db.batch();
+      for (const doc of owned.docs) batch.delete(doc.ref);
+      batch.delete(entitlements.doc(uid));
+      batch.delete(db.doc(`users/${uid}/backup/latest`));
+      await batch.commit();
+    },
   };
 }

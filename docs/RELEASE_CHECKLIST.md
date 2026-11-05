@@ -184,10 +184,20 @@ flutter build appbundle --dart-define-from-file=config/release.defines.json
   `config/release.ios.defines.json`; Firebase iOS app is registered (options in `lib/firebase_options.dart`).
 * Build needs macOS: use Codemagic with `codemagic.yaml` (no Mac), or `flutter build ipa --dart-define-from-file=config/release.ios.defines.json` on a Mac.
 * Needs an Apple Developer account (99 USD/year) and the app created in App Store Connect.
-* Subscriptions on iOS are **not** wired yet (the server only verifies Google Play): the iPhone build shows ads and keeps Plus unavailable.
+* Step-by-step App Store setup (Arabic): **docs/APP_STORE_SETUP.md**.
+* Subscriptions on iOS use StoreKit 2 with the same product ids (`rateby_plus_monthly`, `rateby_plus_yearly`). The app sends the
+  signed transaction (JWS) to `syncEntitlement` with `store: "apple"`; the function checks Apple's signature against
+  `admin/functions/certs/AppleRootCA-G3.cer` (no App Store Connect key needed). Sandbox (TestFlight, App Review) is accepted;
+  production purchases need the `APPLE_APP_ID` parameter (numeric Apple ID) at deploy time.
+* Renewals, expiry and refunds reach the server through App Store Server Notifications V2: set the URL of the
+  `appStoreNotifications` function in App Store Connect. Without it, the app still updates on launch.
+* Sign in with Apple is offered on iPhone (Apple guideline 4.8); Google sign-in appears there only when
+  `GOOGLE_IOS_CLIENT_ID` is set in Codemagic. Settings → حذف الحساب deletes the account (guideline 5.1.1(v));
+  the `deleteUserData` function removes its backup, entitlement and purchase records.
+* iOS 15 minimum (StoreKit 2).
 
-## Google sign-in and cloud backup
+## Sign-in and cloud backup
 
-* Optional sign-in (Google) is required only to subscribe. Subscribers' purchases are keyed by the Google account uid, so they follow the person to a new phone.
+* Optional sign-in (Apple on iPhone, Google) is required only to subscribe. Subscribers' purchases are keyed by the Firebase account uid, so they follow the person to a new phone.
 * Signed-in users get an automatic copy of their budget data at `users/{uid}/backup/latest` (rules in `admin/firestore.rules`). Privacy policy and Data safety already describe it.
-* Setup: Firebase console → Authentication → Google → Enable. Android: register SHA-1 of the upload key, the debug key **and the Play App Signing key** (Play Console → Setup → App signing), then re-download `google-services.json`. iOS: add the `REVERSED_CLIENT_ID` URL scheme to `ios/Runner/Info.plist` and build with `--dart-define=GOOGLE_IOS_CLIENT_ID=<client id>`.
+* Setup: Firebase console → Authentication → Apple → Enable, and Google → Enable. Android: register SHA-1 of the upload key, the debug key **and the Play App Signing key** (Play Console → Setup → App signing), then re-download `google-services.json`. iOS (Google, optional): set `GOOGLE_IOS_CLIENT_ID` in `codemagic.yaml`; the build adds the URL scheme and the define.

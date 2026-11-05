@@ -57,6 +57,26 @@ void main() {
       expect(e.plan, PlusPlanType.monthly);
     });
 
+    test('App Store purchases name their store', () async {
+      Map<String, Object?>? sent;
+      final verifier = CloudFunctionsSubscriptionVerifier(
+        store: 'apple',
+        ensureSignedIn: () async {},
+        call: (name, data) async {
+          sent = data;
+          return {'active': true, 'plan': 'yearly'};
+        },
+      );
+
+      await verifier.verify(productId: 'rateby_plus_yearly', purchaseToken: 'jws');
+
+      expect(sent, {
+        'productId': 'rateby_plus_yearly',
+        'purchaseToken': 'jws',
+        'store': 'apple',
+      });
+    });
+
     test('refresh sends no token', () async {
       Map<String, Object?>? sent;
       final verifier = CloudFunctionsSubscriptionVerifier(

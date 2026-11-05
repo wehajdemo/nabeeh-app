@@ -29,9 +29,19 @@ class FakeAccount implements AccountService {
   @override
   Stream<AccountUser?> get changes => _changes.stream;
   @override
-  Future<AccountUser?> signInWithGoogle() async => _user;
+  List<SignInMethod> get methods => const [SignInMethod.google];
+  @override
+  Future<AccountUser?> signIn(SignInMethod method) async => _user;
   @override
   Future<void> signOut() async => emit(null);
+
+  bool deleted = false;
+  @override
+  Future<bool> deleteAccount() async {
+    deleted = true;
+    emit(null);
+    return true;
+  }
 }
 
 class FakeCloud implements CloudBackup {
@@ -203,4 +213,33 @@ void main() {
     expect(await store.importJson('{broken'), isFalse);
     expect(store.exportJson(), before);
   });
+
+  test('deleting the account removes its copy, the account and Plus', () async {
+    final cloud = FakeCloud();
+    final account = FakeAccount();
+    final verifier = FakeVerifier(
+      PlusEntitlement(active: true, plan: PlusPlanType.yearly, expiresAt: DateTime(2030)),
+    );
+    final container = make(
+      account: account,
+      cloud: cloud,
+      store: demoStore(),
+      verifier: verifier,
+    );
+    account.emit(user);
+    await pumpEventQueue();
+    expect(cloud.docs['u1'], isNotNull);
+    expect(container.read(isPlusProvider), isTrue);
+
+    final deleted =
+        await container.read(backupSyncProvider.notifier).deleteAccount();
+
+    expect(deleted, isTrue);
+    expect(account.deleted, isTrue);
+    expect(cloud.docs['u1'], isNull);
+    expect(container.read(isPlusProvider), isFalse);
+    expect(container.read(budgetStoreProvider).hasData, isTrue,
+        reason: 'the phone keeps its data');
+  });
 }
+

@@ -79,6 +79,11 @@ class SubscribeFooter extends StatelessWidget {
           ],
         ),
         Text(
+          UpgradeStrings.renewalNote,
+          textAlign: TextAlign.center,
+          style: AppTypography.labelXs.copyWith(color: AppColors.outline),
+        ),
+        Text(
           UpgradeStrings.vatNote,
           textAlign: TextAlign.center,
           style: AppTypography.labelXs.copyWith(color: AppColors.outline),

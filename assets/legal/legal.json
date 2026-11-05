@@ -11,8 +11,8 @@
     },
     "supportEmail": "nibras.tech.sa@gmail.com",
     "effectiveDate": {
-      "ar": "23 أكتوبر 2026",
-      "en": "23 October 2026"
+      "ar": "5 نوفمبر 2026",
+      "en": "5 November 2026"
     },
     "monthlyPriceSar": 9,
     "yearlyPriceSar": 67,
@@ -26,7 +26,7 @@
     "privacy": {
       "ar": {
         "title": "سياسة الخصوصية",
-        "intro": "توضّح هذه السياسة كيف يتعامل تطبيق {{appName}} مع بياناتك. بياناتك المالية تبقى على جهازك، وتسجيل الدخول اختياري. إذا سجّلت دخولك بحساب Google حفظنا نسخة منها في حسابك لتعود إليك على أي جهاز.",
+        "intro": "توضّح هذه السياسة كيف يتعامل تطبيق {{appName}} مع بياناتك. بياناتك المالية تبقى على جهازك، وتسجيل الدخول اختياري. إذا سجّلت دخولك بحساب Apple أو Google حفظنا نسخة منها في حسابك لتعود إليك على أي جهاز.",
         "sections": [
           {
             "heading": "من نحن",
@@ -38,7 +38,7 @@
             "heading": "بياناتك المالية: على جهازك، ونسخة اختيارية في حسابك",
             "blocks": [
               "الراتب الصافي، ويوم نزول الراتب، والالتزامات الشهرية، وأهداف الادخار، والمصاريف التي تسجّلها: تُحفظ على جهازك. وما دمت لم تسجّل دخولك لا نرسلها إلى خوادمنا ولا إلى أي جهة أخرى، ولا نستطيع الاطلاع عليها.",
-              "عند تسجيل الدخول بحساب Google (اختياري، ومطلوب عند الاشتراك) تُحفظ نسخة من هذه البيانات في حسابك على خدمة Firebase (Cloud Firestore) التابعة لـ Google، ولا يصل إليها غيرك، وتُحدَّث تلقائياً مع كل تغيير حتى تعود إليك بعد تغيير الجهاز أو إعادة ضبطه. تقدر تحذف هذه النسخة في أي وقت من الإعدادات، أو تسجّل خروجك فتتوقف المزامنة",
+              "عند تسجيل الدخول بحساب Apple أو Google (اختياري، ومطلوب عند الاشتراك) تُحفظ نسخة من هذه البيانات في حسابك على خدمة Firebase (Cloud Firestore) التابعة لـ Google، ولا يصل إليها غيرك، وتُحدَّث تلقائياً مع كل تغيير حتى تعود إليك بعد تغيير الجهاز أو إعادة ضبطه. تقدر تحذف هذه النسخة في أي وقت من الإعدادات، أو تسجّل خروجك فتتوقف المزامنة",
               "عند تصدير تقرير (PDF أو CSV) يُنشأ الملف على جهازك، وأنت من يقرر مشاركته ومع من."
             ]
           },
@@ -48,8 +48,8 @@
               {
                 "bullets": [
                   "جدول مواعيد الصرف: يقرأ التطبيق من خدمة Firebase (Cloud Firestore) التابعة لـ Google جدولاً عاماً بمواعيد نزول الرواتب والدعومات. هذه بيانات عامة لا تتضمن شيئاً عنك، لكن أي اتصال بالإنترنت يكشف للخدمة عنوان IP ومعلومات تقنية عن الجهاز لازمة لإتمام الاتصال.",
-                  "تسجيل الدخول والنسخة الاحتياطية: عند تسجيل الدخول بحساب Google نستلم معرّف حسابك وبريدك واسمك من Google، ونحفظ نسخة من بياناتك المالية (الراتب والالتزامات والأهداف والمصاريف وملاحظاتها) مرتبطة بحسابك فقط، وتُستخدم لاستعادتها لك لا غير.",
-                  "الاشتراك في نبيه بلس: عند الاشتراك أو استعادة المشتريات يرسل التطبيق إلى خادمنا رمز الشراء ومعرّف المنتج الصادرين عن Google Play، مع المعرّف الفريد لحسابك في Google (عبر Firebase Authentication)، ليرتبط الاشتراك بحسابك ويعود إليك على أي جهاز. نتحقق من الرمز لدى Google Play ونحفظ حالة الاشتراك وتاريخ انتهائه. لا نستلم بيانات بطاقتك المصرفية؛ يتم الدفع كلياً عبر Google Play.",
+                  "تسجيل الدخول والنسخة الاحتياطية: عند تسجيل الدخول بحساب Apple أو Google نستلم معرّف حسابك وبريدك واسمك من مزوّد الحساب (وقد يكون بريداً مخفياً إذا اخترت «إخفاء بريدي» في Apple)، ونحفظ نسخة من بياناتك المالية (الراتب والالتزامات والأهداف والمصاريف وملاحظاتها) مرتبطة بحسابك فقط، وتُستخدم لاستعادتها لك لا غير.",
+                  "الاشتراك في نبيه بلس: عند الاشتراك أو استعادة المشتريات يرسل التطبيق إلى خادمنا إثبات الشراء ومعرّف المنتج الصادرين عن المتجر (Google Play أو App Store)، مع المعرّف الفريد لحسابك (عبر Firebase Authentication)، ليرتبط الاشتراك بحسابك ويعود إليك على أي جهاز. نتحقق من إثبات الشراء لدى Google Play أو من توقيع Apple عليه، ونحفظ حالة الاشتراك وتاريخ انتهائه. لا نستلم بيانات بطاقتك المصرفية؛ يتم الدفع كلياً عبر المتجر.",
                   "التنبيهات: تُجدول على جهازك ولا تمر عبر أي خادم."
                 ]
               },
@@ -89,7 +89,7 @@
           {
             "heading": "الجهات التي تعالج البيانات",
             "blocks": [
-              "نعتمد على خدمات Google: Google Play (المدفوعات والاشتراكات) وFirebase (قاعدة البيانات وتسجيل الدخول والدوال السحابية). تخضع معالجتها لشروط Google وسياساتها.",
+              "نعتمد على خدمات Google: Google Play (المدفوعات والاشتراكات على أندرويد) وFirebase (قاعدة البيانات وتسجيل الدخول والدوال السحابية)، وعلى Apple: App Store (المدفوعات والاشتراكات على الآيفون) وتسجيل الدخول بـ Apple. تخضع معالجتها لشروط كل منهما وسياساته.",
               {
                 "text": "وتُعرض الإعلانات عبر Google AdMob.",
                 "onlyIf": "ads"
@@ -103,6 +103,7 @@
                 "bullets": [
                   "بيانات التطبيق على جهازك: تُحذف بالضغط على «تصفير الحساب والبدء من جديد» في الإعدادات، أو بإزالة التطبيق.",
                   "النسخة المحفوظة في حسابك: تُحذف من الإعدادات ← «حذف النسخة المحفوظة في حسابي»، أو بمراسلتنا على {{supportEmail}}.",
+                  "حسابك كاملاً: تحذفه من الإعدادات ← «حذف الحساب»، فنحذف الحساب ونسختك المحفوظة وسجل الاشتراك المرتبط به من خادمنا. حذف الحساب لا يلغي اشتراكك في المتجر؛ ألغه من إعدادات اشتراكات Apple أو Google Play.",
                   "سجل الاشتراك على خادمنا (رمز الشراء والمعرّف المجهول وحالة الاشتراك): نحتفظ به ما دام ضرورياً لتقديم الاشتراك ولالتزاماتنا المحاسبية والنظامية. لطلب حذفه راسلنا على {{supportEmail}} مع ما يثبت الشراء. قد يؤدي حذفه إلى إيقاف مزايا نبيه بلس على ذلك الحساب."
                 ]
               }
@@ -136,7 +137,7 @@
       },
       "en": {
         "title": "Privacy Policy",
-        "intro": "This policy explains how {{appName}} handles your data. Your financial data stays on your device, and signing in is optional. If you sign in with Google we keep a copy in your account so it comes back on any device.",
+        "intro": "This policy explains how {{appName}} handles your data. Your financial data stays on your device, and signing in is optional. If you sign in with Apple or Google we keep a copy in your account so it comes back on any device.",
         "sections": [
           {
             "heading": "Who we are",
@@ -148,7 +149,7 @@
             "heading": "Your financial data: on your device, with an optional copy in your account",
             "blocks": [
               "Your net salary, payday, monthly commitments, savings goals and the expenses you record are stored on your device. While you are not signed in we do not send them to our servers or to anyone else, and we cannot see them.",
-              "When you sign in with Google (optional, and required to subscribe) a copy of this data is saved to your account in Google’s Firebase service (Cloud Firestore). Only you can access it, and it is updated automatically with each change so it returns after you change or reset your device. You can delete the copy at any time in Settings, or sign out to stop syncing",
+              "When you sign in with Apple or Google (optional, and required to subscribe) a copy of this data is saved to your account in Google’s Firebase service (Cloud Firestore). Only you can access it, and it is updated automatically with each change so it returns after you change or reset your device. You can delete the copy at any time in Settings, or sign out to stop syncing",
               "When you export a report (PDF or CSV) the file is created on your device, and you decide whether and with whom to share it."
             ]
           },
@@ -158,8 +159,8 @@
               {
                 "bullets": [
                   "Payout schedule: the app reads a public schedule of salary and benefit payout dates from Google’s Firebase service (Cloud Firestore). It contains nothing about you, but any internet connection reveals your IP address and technical device information to the service, as needed to complete the connection.",
-                  "Sign-in and backup: when you sign in with Google we receive your account ID, e-mail and name from Google and store a copy of your financial data (salary, commitments, goals, expenses and their notes) linked only to your account, used only to restore it for you.",
-                  "Nabeeh Plus subscription: when you subscribe or restore purchases, the app sends our server the purchase token and product ID issued by Google Play, together with your Google account’s unique ID (through Firebase Authentication), so the subscription follows your account to any device. We verify the token with Google Play and store the subscription status and end date. We never receive your card details; payment is handled entirely by Google Play.",
+                  "Sign-in and backup: when you sign in with Apple or Google we receive your account ID, e-mail and name from the account provider (the e-mail may be a private relay address if you choose “Hide My Email” with Apple) and store a copy of your financial data (salary, commitments, goals, expenses and their notes) linked only to your account, used only to restore it for you.",
+                  "Nabeeh Plus subscription: when you subscribe or restore purchases, the app sends our server the proof of purchase and product ID issued by the store (Google Play or the App Store), together with your account’s unique ID (through Firebase Authentication), so the subscription follows your account to any device. We verify the proof with Google Play or check Apple’s signature on it, and store the subscription status and end date. We never receive your card details; payment is handled entirely by the store.",
                   "Reminders: scheduled on your device and never pass through a server."
                 ]
               },
@@ -199,7 +200,7 @@
           {
             "heading": "Who processes data for us",
             "blocks": [
-              "We rely on Google services: Google Play (payments and subscriptions) and Firebase (database, sign-in and cloud functions). Their processing is governed by Google’s terms and policies.",
+              "We rely on Google services: Google Play (payments and subscriptions on Android) and Firebase (database, sign-in and cloud functions), and on Apple: the App Store (payments and subscriptions on iPhone) and Sign in with Apple. Their processing is governed by each company’s terms and policies.",
               {
                 "text": "Ads are served through Google AdMob.",
                 "onlyIf": "ads"
@@ -213,6 +214,7 @@
                 "bullets": [
                   "App data on your device: deleted with “Reset account and start over” in Settings, or by uninstalling the app.",
                   "Copy saved in your account: deleted in Settings → “Delete my saved copy”, or by e-mailing {{supportEmail}}.",
+                  "Your whole account: delete it in Settings → “Delete account”; we delete the account, your saved copy and the subscription record tied to it from our server. Deleting the account does not cancel a store subscription; cancel it in your Apple or Google Play subscription settings.",
                   "Subscription record on our server (purchase token, anonymous ID and subscription status): kept as long as necessary to provide the subscription and meet our accounting and legal obligations. To ask for deletion, email {{supportEmail}} with proof of purchase. Deleting it may switch off Nabeeh Plus for that account."
                 ]
               }
@@ -280,9 +282,9 @@
               {
                 "bullets": [
                   "الأسعار: {{monthlyPrice}} شهرياً أو {{yearlyPrice}} سنوياً، شاملة ضريبة القيمة المضافة.",
-                  "تجربة مجانية مدتها {{trialDays}} أيام للمشترك المؤهّل، وتحدد Google Play أهليتك لها.",
+                  "تجربة مجانية مدتها {{trialDays}} أيام للمشترك المؤهّل، ويحدد المتجر (Google Play أو App Store) أهليتك لها.",
                   "يتجدد الاشتراك تلقائياً في نهاية كل فترة ما لم تلغه قبل موعد التجديد.",
-                  "تتم الفوترة والاسترداد عبر Google Play وتخضع لسياساتها. للإلغاء: Google Play ← المدفوعات والاشتراكات ← الاشتراكات، أو زر «إدارة الاشتراك» في تبويب الترقية.",
+                  "تتم الفوترة والاسترداد عبر المتجر الذي اشتركت منه (Google Play أو App Store) وتخضع لسياساته. يتجدد الاشتراك تلقائياً ما لم تلغه قبل نهاية الفترة بـ 24 ساعة على الأقل. للإلغاء: Google Play ← المدفوعات والاشتراكات ← الاشتراكات، أو في الآيفون: الإعدادات ← اسمك ← الاشتراكات، أو زر «إدارة الاشتراك» في تبويب الترقية.",
                   "عند الإلغاء تبقى مزايا نبيه بلس حتى نهاية الفترة المدفوعة."
                 ]
               },
@@ -366,9 +368,9 @@
               {
                 "bullets": [
                   "Price: {{monthlyPrice}} per month or {{yearlyPrice}} per year, including VAT.",
-                  "A {{trialDays}}-day free trial for eligible subscribers; Google Play decides whether you are eligible.",
+                  "A {{trialDays}}-day free trial for eligible subscribers; the store (Google Play or the App Store) decides whether you are eligible.",
                   "The subscription renews automatically at the end of each period unless you cancel before the renewal date.",
-                  "Billing and refunds are handled by Google Play under its policies. To cancel: Google Play → Payments & subscriptions → Subscriptions, or the “Manage subscription” button in the Upgrade tab.",
+                  "Billing and refunds are handled by the store you subscribed through (Google Play or the App Store) under its policies. The subscription renews automatically unless cancelled at least 24 hours before the end of the period. To cancel: Google Play → Payments & subscriptions → Subscriptions, or on iPhone: Settings → your name → Subscriptions, or the “Manage subscription” button in the Upgrade tab.",
                   "After cancelling, Nabeeh Plus features remain until the end of the paid period."
                 ]
               },
@@ -427,25 +429,25 @@
           {
             "heading": "كيف ألغي اشتراكي؟",
             "blocks": [
-              "افتح Google Play ← الملف الشخصي ← المدفوعات والاشتراكات ← الاشتراكات ← {{appName}} بلس ← إلغاء الاشتراك. أو اضغط «إدارة الاشتراك» في تبويب الترقية داخل التطبيق. تبقى المزايا حتى نهاية الفترة المدفوعة."
+              "على أندرويد: افتح Google Play ← الملف الشخصي ← المدفوعات والاشتراكات ← الاشتراكات ← {{appName}} بلس ← إلغاء الاشتراك. على الآيفون: الإعدادات ← اسمك ← الاشتراكات ← {{appName}} ← إلغاء الاشتراك. أو اضغط «إدارة الاشتراك» في تبويب الترقية داخل التطبيق. تبقى المزايا حتى نهاية الفترة المدفوعة."
             ]
           },
           {
             "heading": "اشتركت ولم تتفعّل المزايا",
             "blocks": [
-              "تأكد من اتصالك بالإنترنت، ثم اضغط «استعادة المشتريات السابقة» في تبويب الترقية بنفس حساب Google الذي اشتركت به. إن استمرت المشكلة راسلنا مع رقم الطلب الموجود في إيصال Google Play."
+              "تأكد من اتصالك بالإنترنت، ثم اضغط «استعادة المشتريات السابقة» في تبويب الترقية بنفس الحساب (Apple أو Google) الذي اشتركت به. إن استمرت المشكلة راسلنا مع رقم الطلب الموجود في إيصال المتجر."
             ]
           },
           {
             "heading": "غيّرت جهازي أو أعدت تثبيت التطبيق",
             "blocks": [
-              "سجّل دخولك بنفس حساب Google: يعود اشتراكك وبياناتك المحفوظة في حسابك تلقائياً. وإن لم تكن سجّلت دخولك في الجهاز القديم فبياناتك المالية ما زالت عليه ولا تنتقل تلقائياً."
+              "سجّل دخولك بنفس الحساب (Apple أو Google): يعود اشتراكك وبياناتك المحفوظة في حسابك تلقائياً. وإن لم تكن سجّلت دخولك في الجهاز القديم فبياناتك المالية ما زالت عليه ولا تنتقل تلقائياً."
             ]
           },
           {
             "heading": "كيف أحذف بياناتي؟",
             "blocks": [
-              "من الإعدادات اضغط «تصفير الحساب والبدء من جديد» لحذف بياناتك من جهازك. ولحذف سجل الاشتراك أو نسختك المحفوظة في حسابك راسلنا على {{supportEmail}}."
+              "من الإعدادات اضغط «تصفير الحساب والبدء من جديد» لحذف بياناتك من جهازك. ولحذف حسابك ونسختك المحفوظة وسجل الاشتراك اضغط «حذف الحساب» في الإعدادات، أو راسلنا على {{supportEmail}}."
             ]
           },
           {
@@ -457,7 +459,7 @@
           {
             "heading": "الاسترداد",
             "blocks": [
-              "تتم معالجة طلبات الاسترداد عبر Google Play وفق سياساتها، ويمكنك طلبه من سجل الطلبات في حسابك على Google Play."
+              "تتم معالجة طلبات الاسترداد عبر المتجر وفق سياساته: من سجل الطلبات في حسابك على Google Play، أو من reportaproblem.apple.com للاشتراكات من App Store."
             ]
           }
         ]
@@ -469,25 +471,25 @@
           {
             "heading": "How do I cancel my subscription?",
             "blocks": [
-              "Open Google Play → Profile → Payments & subscriptions → Subscriptions → {{appName}} Plus → Cancel subscription. Or tap “Manage subscription” in the Upgrade tab of the app. Plus features remain until the end of the paid period."
+              "On Android: open Google Play → Profile → Payments & subscriptions → Subscriptions → {{appName}} Plus → Cancel subscription. On iPhone: Settings → your name → Subscriptions → {{appName}} → Cancel subscription. Or tap “Manage subscription” in the Upgrade tab of the app. Plus features remain until the end of the paid period."
             ]
           },
           {
             "heading": "I subscribed but the features are not unlocked",
             "blocks": [
-              "Check your internet connection, then tap “Restore previous purchases” in the Upgrade tab, using the same Google account you subscribed with. If the problem continues, email us with the order number from your Google Play receipt."
+              "Check your internet connection, then tap “Restore previous purchases” in the Upgrade tab, using the same account (Apple or Google) you subscribed with. If the problem continues, email us with the order number from your store receipt."
             ]
           },
           {
             "heading": "I changed phones or reinstalled the app",
             "blocks": [
-              "Sign in with the same Google account: your subscription and the data saved in your account return automatically. If you had not signed in on the old device, your financial data is still on that device and does not move by itself."
+              "Sign in with the same account (Apple or Google): your subscription and the data saved in your account return automatically. If you had not signed in on the old device, your financial data is still on that device and does not move by itself."
             ]
           },
           {
             "heading": "How do I delete my data?",
             "blocks": [
-              "In Settings tap “Reset account and start over” to delete your data from your device. To delete the subscription record or the copy saved in your account, email {{supportEmail}}."
+              "In Settings tap “Reset account and start over” to delete your data from your device. To delete your account, your saved copy and the subscription record, tap “Delete account” in Settings, or email {{supportEmail}}."
             ]
           },
           {
@@ -499,7 +501,7 @@
           {
             "heading": "Refunds",
             "blocks": [
-              "Refunds are handled by Google Play under its policies; you can request one from the order history of your Google Play account."
+              "Refunds are handled by the store under its policies: from the order history of your Google Play account, or at reportaproblem.apple.com for App Store subscriptions."
             ]
           }
         ]

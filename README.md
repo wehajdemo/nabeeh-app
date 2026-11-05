@@ -2,8 +2,9 @@
 
 Salary-cycle budgeting app for Saudi Arabia. **All screens are built:**
 Onboarding (3 steps) · Home · Add Expense · Goals (with balances) · Payments (payout dates) · Upgrade (نبيه بلس) ·
-Settings · Privacy policy / Terms / Support. Plus: local reminders, PDF/CSV export, optional Google sign-in with a
-cloud backup, and Google Play subscriptions verified by a Cloud Function.
+Settings · Privacy policy / Terms / Support. Plus: local reminders, PDF/CSV export, optional sign-in (Apple or Google) with a
+cloud backup, and Google Play / App Store subscriptions verified by a Cloud Function. The iPhone app is built
+and sent to TestFlight by Codemagic (see **docs/APP_STORE_SETUP.md**).
 
 > **Status:** `flutter analyze` reports no errors or warnings and all 223 Flutter tests pass (2 November 2026).
 > Billing, notifications and the Cloud Function are covered by the on-device pass in
@@ -32,7 +33,7 @@ Firebase is optional at runtime: until it is configured the app silently uses th
 Setup (project, rules, first admin, `flutterfire configure`) is a short checklist in **admin/README.md**; the Play
 Console / functions / legal-pages steps are in **docs/RELEASE_CHECKLIST.md**.
 
-The app reads one document, `config/payout_schedule` (at most once per 24 h, cached). Signing in with Google is
+The app reads one document, `config/payout_schedule` (at most once per 24 h, cached). Signing in (Apple or Google) is
 optional and required only to subscribe; the app then calls the `syncEntitlement` function, and clients never read or
 write purchase data directly.
 
@@ -48,7 +49,7 @@ Play Billing ─ in_app_purchase ─▶ PlayBillingGateway ─ purchase token �
   store re-delivers it on the next launch.
 * The app re-checks on start/resume (≥15 min apart, only for people who ever subscribed). Offline, the cached
   entitlement works until its end date.
-* One purchase unlocks one account at a time; signing in with the same Google account brings it back on a new phone.
+* One purchase unlocks one account at a time; signing in with the same account brings it back on a new phone.
 * **What Plus gates** (one place to change: `features/upgrade/domain/plus_gate.dart`): more than
   `PlusLimits.freeGoalCount` (3) goals, PDF/CSV export, daily-limit alerts. Payout-date alerts stay free.
   Ads are removed for subscribers (`showAdsProvider`).
@@ -77,7 +78,7 @@ lib/
                   AppTextField, AppSwitch, SettingsTile/Group, ChoiceChipBar, StepProgressBar,
                   DashedBorderButton, app bottom sheet, AppToast, ScreenBody, ...
   features/
-    account/      optional Google sign-in (AccountService) · cloud backup in Firestore (CloudBackup) · sign-in prompt
+    account/      optional Apple / Google sign-in + account deletion (AccountService) · cloud backup in Firestore (CloudBackup) · sign-in prompt
     budget/       shared kernel
                   domain/       entities (BudgetProfile, SavingsGoal, FixedExpense, AppSettings, ...),
                                 repository interfaces (Budget / Profile / Goals / Settings),

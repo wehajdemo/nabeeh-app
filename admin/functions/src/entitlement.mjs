@@ -56,6 +56,56 @@ export function interpretSubscription(purchase, { now, products }) {
 }
 
 /**
+ * Turns a verified StoreKit 2 transaction into the same shape as
+ * [interpretSubscription]. Pure.
+ *
+ * @param {object} tx  JWSTransactionDecodedPayload (signature already checked).
+ * @param {{ now: number, products: Record<string,string> }} ctx
+ */
+export function interpretAppleTransaction(tx, { now, products }) {
+  const none = {
+    valid: false,
+    entitled: false,
+    needsAcknowledgement: false,
+    testPurchase: false,
+  };
+  if (!tx || typeof tx !== 'object') return none;
+  if (!Object.hasOwn(products, tx.productId)) return none;
+  if (typeof tx.originalTransactionId !== 'string' || tx.originalTransactionId === '') {
+    return none;
+  }
+  const expiresAtMs = Number(tx.expiresDate);
+  if (!Number.isFinite(expiresAtMs)) return none;
+
+  const revoked = tx.revocationDate != null;
+  const state = revoked
+    ? 'APPLE_REVOKED'
+    : expiresAtMs > now
+      ? 'APPLE_ACTIVE'
+      : 'APPLE_EXPIRED';
+  return {
+    valid: true,
+    productId: tx.productId,
+    plan: products[tx.productId],
+    state,
+    expiresAtMs,
+    entitled: state === 'APPLE_ACTIVE',
+    needsAcknowledgement: false,
+    testPurchase: tx.environment !== 'Production',
+    revoked,
+  };
+}
+
+/**
+ * Apple sends one transaction per renewal, and the app may re-send an old
+ * one. Keep the latest period, but a refund always wins.
+ */
+export function mergeAppleInfo(previous, next) {
+  if (!previous?.valid || next.revoked) return next;
+  return next.expiresAtMs >= previous.expiresAtMs ? next : previous;
+}
+
+/**
  * The best of several purchases of one account: an entitled one with the
  * latest end date, otherwise the latest ended one (so the app can show when
  * it ended), otherwise "none".

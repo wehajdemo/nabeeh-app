@@ -48,8 +48,57 @@ export function fakeStore() {
     async putEntitlement(uid, entitlement) {
       entitlements.set(uid, structuredClone(entitlement));
     },
+    async deleteAccountData(uid) {
+      for (const [hash, record] of tokens) {
+        if (record.uid === uid) tokens.delete(hash);
+      }
+      entitlements.delete(uid);
+    },
   };
 }
+
+/** Stand-in for Apple's signature check: "JWS" strings map to payloads. */
+export function fakeApple() {
+  const transactions = new Map(); // jws → decoded transaction
+  const notifications = new Map(); // signedPayload → decoded notification
+  return {
+    transactions,
+    notifications,
+    async verifyTransaction(jws) {
+      const tx = transactions.get(jws);
+      if (!tx) {
+        const { ServiceError } = await import('../src/errors.mjs');
+        throw new ServiceError('invalid-argument', 'Unknown App Store purchase.');
+      }
+      return structuredClone(tx);
+    },
+    async verifyNotification(payload) {
+      const note = notifications.get(payload);
+      if (!note) {
+        const { ServiceError } = await import('../src/errors.mjs');
+        throw new ServiceError('invalid-argument', 'Unknown App Store purchase.');
+      }
+      return structuredClone(note);
+    },
+  };
+}
+
+export const appleTransaction = ({
+  originalTransactionId = '2000000111',
+  productId = 'rateby_plus_yearly',
+  expiresDate = Date.parse('2027-10-23T12:00:00Z'),
+  revocationDate,
+  environment = 'Sandbox',
+} = {}) => ({
+  originalTransactionId,
+  transactionId: `${originalTransactionId}-${expiresDate}`,
+  bundleId: 'com.rateby.rateby',
+  productId,
+  expiresDate,
+  type: 'Auto-Renewable Subscription',
+  environment,
+  ...(revocationDate ? { revocationDate } : {}),
+});
 
 export const playPurchase = ({
   productId = 'rateby_plus_yearly',

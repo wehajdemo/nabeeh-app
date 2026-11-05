@@ -3,7 +3,8 @@ import 'package:rateby/features/upgrade/domain/billing_client.dart';
 import 'package:rateby/features/upgrade/domain/plus_plan.dart';
 import 'package:rateby/features/upgrade/domain/plus_products.dart';
 
-/// [BillingClient] over the `in_app_purchase` plugin (Google Play Billing).
+/// [BillingClient] over the `in_app_purchase` plugin: Google Play Billing on
+/// Android, StoreKit 2 on iOS (its token is the signed transaction).
 class InAppPurchaseBillingClient implements BillingClient {
   InAppPurchaseBillingClient([InAppPurchase? iap])
       : _iap = iap ?? InAppPurchase.instance;

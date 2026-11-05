@@ -39,6 +39,37 @@ class CloudAccountSection extends ConsumerWidget {
     }
   }
 
+  Future<void> _deleteAccount(BuildContext context, WidgetRef ref) async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text(AccountStrings.deleteAccount),
+        content: const Text(AccountStrings.deleteAccountConfirm),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text(AccountStrings.notNow),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(backgroundColor: AppColors.error),
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text(AccountStrings.delete),
+          ),
+        ],
+      ),
+    );
+    if (ok != true || !context.mounted) return;
+    String? message;
+    try {
+      final deleted =
+          await ref.read(backupSyncProvider.notifier).deleteAccount();
+      if (deleted) message = AccountStrings.accountDeleted;
+    } on Object {
+      message = AccountStrings.accountDeleteFailed;
+    }
+    if (message != null && context.mounted) AppToast.show(context, message);
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(accountUserProvider).valueOrNull;
@@ -95,6 +126,13 @@ class CloudAccountSection extends ConsumerWidget {
               title: AccountStrings.signOut,
               subtitle: AccountStrings.signOutSubtitle,
               onTap: () => ref.read(accountServiceProvider).signOut(),
+            ),
+            SettingsTile(
+              icon: Icons.person_remove_outlined,
+              iconColor: AppColors.error,
+              title: AccountStrings.deleteAccount,
+              subtitle: AccountStrings.deleteAccountSubtitle,
+              onTap: () => _deleteAccount(context, ref),
             ),
           ],
         ),

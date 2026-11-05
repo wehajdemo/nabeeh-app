@@ -1,9 +1,16 @@
 import { createHash } from 'node:crypto';
-import { bestEntitlement, interpretSubscription } from './entitlement.mjs';
+import {
+  bestEntitlement,
+  interpretAppleTransaction,
+  interpretSubscription,
+  mergeAppleInfo,
+} from './entitlement.mjs';
 import { ServiceError } from './errors.mjs';
 import { PRODUCTS } from './products.mjs';
 
 const MAX_TOKEN_LENGTH = 4096;
+// A StoreKit 2 JWS carries its certificate chain, so it is much longer.
+const MAX_APPLE_JWS_LENGTH = 16384;
 const MAX_TOKENS_PER_ACCOUNT = 5;
 
 export function hashToken(token) {
@@ -22,7 +29,10 @@ export function hashToken(token) {
  *     putToken(hash:string, record:object): Promise<void>,
  *     listTokens(uid:string, limit:number): Promise<object[]>,
  *     putEntitlement(uid:string, entitlement:object): Promise<void>,
+ *     deleteAccountData(uid:string): Promise<void>,
  *   },
+ *   apple?: { verifyTransaction(jws:string): Promise<object>,
+ *             verifyNotification(payload:string): Promise<object> },
  *   products?: Record<string,string>,
  *   now?: () => number,
  * }} deps
@@ -30,9 +40,46 @@ export function hashToken(token) {
 export function createEntitlementService({
   play,
   store,
+  apple,
   products = PRODUCTS,
   now = Date.now,
 }) {
+  /**
+   * Stores a verified App Store transaction under its original transaction
+   * id (the same for every renewal). `uid` null = keep the current owner.
+   */
+  async function applyAppleTransaction(tx, uid) {
+    const info = interpretAppleTransaction(tx, { now: now(), products });
+    if (!info.valid) {
+      throw new ServiceError(
+        'invalid-argument',
+        'The purchase does not belong to a Plus product.',
+      );
+    }
+    const hash = hashToken(`apple:${tx.originalTransactionId}`);
+    const existing = await store.getToken(hash);
+    const owner = uid ?? existing?.uid;
+    if (!owner) return { previousUid: undefined, owner: undefined };
+    await store.putToken(hash, {
+      uid: owner,
+      store: 'apple',
+      originalTransactionId: tx.originalTransactionId,
+      productId: info.productId,
+      info: mergeAppleInfo(existing?.info, info),
+      checkedAtMs: now(),
+      claimedAtMs:
+        uid && existing?.uid !== uid ? now() : existing?.claimedAtMs ?? now(),
+    });
+    return { previousUid: existing?.uid, owner };
+  }
+
+  function requireApple() {
+    if (!apple) {
+      throw new ServiceError('failed-precondition', 'App Store purchases are not set up.');
+    }
+    return apple;
+  }
+
   /** Reads Google's view of one purchase token and remembers it. */
   async function checkToken(uid, token, { claim }) {
     const purchase = await play.getSubscription(token);
@@ -76,6 +123,12 @@ export function createEntitlementService({
     const records = await store.listTokens(uid, MAX_TOKENS_PER_ACCOUNT);
     const fresh = [];
     for (const record of records) {
+      // App Store purchases are kept current by the app and by Apple's
+      // notifications; their stored state is all there is to re-read.
+      if (record.store === 'apple') {
+        fresh.push({ info: record.info });
+        continue;
+      }
       try {
         const { info } = await checkToken(uid, record.token, { claim: false });
         fresh.push({ info });
@@ -94,15 +147,33 @@ export function createEntitlementService({
 
   return {
     /**
-     * @param {{ uid: string, productId?: string, purchaseToken?: string }} request
+     * @param {{ uid: string, productId?: string, purchaseToken?: string,
+     *           store?: 'google'|'apple' }} request
+     *   For `store: 'apple'` the token is a StoreKit 2 signed transaction.
      * @returns {Promise<{active:boolean, plan?:string, expiresAtMs?:number}>}
      */
-    async sync({ uid, productId, purchaseToken }) {
+    async sync({ uid, productId, purchaseToken, store: storeName }) {
       if (typeof uid !== 'string' || uid === '') {
         throw new ServiceError('unauthenticated', 'Sign-in required.');
       }
       if (purchaseToken === undefined || purchaseToken === null) {
         return refreshAccount(uid);
+      }
+      if (storeName === 'apple') {
+        if (
+          typeof purchaseToken !== 'string' ||
+          purchaseToken === '' ||
+          purchaseToken.length > MAX_APPLE_JWS_LENGTH
+        ) {
+          throw new ServiceError('invalid-argument', 'Bad purchase token.');
+        }
+        const tx = await requireApple().verifyTransaction(purchaseToken);
+        const { previousUid } = await applyAppleTransaction(tx, uid);
+        if (previousUid && previousUid !== uid) await refreshAccount(previousUid);
+        return refreshAccount(uid);
+      }
+      if (storeName !== undefined && storeName !== null && storeName !== 'google') {
+        throw new ServiceError('invalid-argument', 'Unknown store.');
       }
       if (
         typeof purchaseToken !== 'string' ||
@@ -139,6 +210,27 @@ export function createEntitlementService({
       const record = await store.getToken(hashToken(purchaseToken));
       if (!record?.uid) return null;
       return refreshAccount(record.uid);
+    },
+
+    /**
+     * An App Store Server Notification (V2): renewal, expiry, refund...
+     * Transactions nobody has claimed yet are ignored.
+     */
+    async handleAppleNotification(signedPayload) {
+      if (typeof signedPayload !== 'string' || signedPayload === '') return null;
+      const verifier = requireApple();
+      const note = await verifier.verifyNotification(signedPayload);
+      const jws = note?.data?.signedTransactionInfo;
+      if (typeof jws !== 'string') return null; // TEST and summary notices
+      const tx = await verifier.verifyTransaction(jws);
+      const { owner } = await applyAppleTransaction(tx, null);
+      return owner ? refreshAccount(owner) : null;
+    },
+
+    /** The Firebase account was deleted: forget everything tied to it. */
+    async deleteAccount(uid) {
+      if (typeof uid !== 'string' || uid === '') return;
+      await store.deleteAccountData(uid);
     },
   };
 }

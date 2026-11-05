@@ -51,6 +51,8 @@ abstract final class UpgradeStrings {
   static const String terms = 'شروط الاستخدام';
   static const String privacy = 'سياسة الخصوصية';
   static const String support = 'الدعم والمساعدة';
+  static const String renewalNote =
+      'يتجدد الاشتراك تلقائياً بنفس السعر في نهاية كل فترة ما لم تلغه قبل انتهائها بـ 24 ساعة على الأقل، ويُخصم المبلغ من حسابك في المتجر (Apple أو Google Play). تدير اشتراكك وتلغيه من إعدادات المتجر.';
   static const String vatNote =
       'الأسعار تشمل ضريبة القيمة المضافة المعمول بها في المملكة العربية السعودية.';
 
@@ -61,7 +63,7 @@ abstract final class UpgradeStrings {
   static const String purchasePending =
       'عملية الدفع قيد المعالجة. سيتفعّل نبيه بلس تلقائياً عند اكتمالها';
   static const String nothingToRestore =
-      'لم نجد اشتراكاً نشطاً لهذا الحساب في Google Play';
+      'لم نجد اشتراكاً نشطاً لهذا الحساب';
   static const String linkFailed = 'تعذّر فتح الرابط';
 
   static const String activeTitle = 'اشتراكك في نبيه بلس نشط';
@@ -71,5 +73,5 @@ abstract final class UpgradeStrings {
         null => 'شكراً لدعمك نبيه',
       };
   static String activeUntil(String date) => 'الفترة المدفوعة سارية حتى $date';
-  static const String manageSubscription = 'إدارة الاشتراك في Google Play';
+  static const String manageSubscription = 'إدارة الاشتراك';
 }

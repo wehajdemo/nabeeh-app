@@ -24,16 +24,18 @@ class CloudFunctionsSubscriptionVerifier implements SubscriptionVerifier {
   CloudFunctionsSubscriptionVerifier({
     required CallableInvoker call,
     required Future<void> Function() ensureSignedIn,
+    this.store,
   })  : _call = call,
         _ensureSignedIn = ensureSignedIn;
 
-  /// Production wiring: the Google-signed-in Firebase user + the deployed
+  /// Production wiring: the signed-in Firebase user + the deployed
   /// function. Anonymous users are not accepted (subscriptions follow the
-  /// Google account).
-  factory CloudFunctionsSubscriptionVerifier.firebase() {
+  /// Apple or Google account).
+  factory CloudFunctionsSubscriptionVerifier.firebase({String? store}) {
     final functions =
         FirebaseFunctions.instanceFor(region: BillingConfig.functionsRegion);
     return CloudFunctionsSubscriptionVerifier(
+      store: store,
       ensureSignedIn: () async {
         final auth = FirebaseAuth.instance;
         final user = auth.currentUser;
@@ -54,6 +56,10 @@ class CloudFunctionsSubscriptionVerifier implements SubscriptionVerifier {
 
   static const String functionName = 'syncEntitlement';
 
+  /// Store the purchases come from (`'apple'`: the token is a StoreKit 2
+  /// signed transaction). `null` = Google Play.
+  final String? store;
+
   final CallableInvoker _call;
   final Future<void> Function() _ensureSignedIn;
 
@@ -62,7 +68,11 @@ class CloudFunctionsSubscriptionVerifier implements SubscriptionVerifier {
     required String productId,
     required String purchaseToken,
   }) =>
-      _sync({'productId': productId, 'purchaseToken': purchaseToken});
+      _sync({
+        'productId': productId,
+        'purchaseToken': purchaseToken,
+        if (store != null) 'store': store,
+      });
 
   @override
   Future<PlusEntitlement> refresh() => _sync(const {});

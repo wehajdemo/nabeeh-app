@@ -30,14 +30,13 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
   final firestore = await initFirestore();
-  // Ads run on Android and iOS. Subscriptions are sold through Google Play
-  // only (for now), verified by a Cloud Function, so both Android and
-  // Firebase must be present for billing.
+  // Ads and subscriptions run on Android and iOS. Subscriptions are sold
+  // through Google Play or the App Store and verified by a Cloud Function,
+  // so Firebase must be present for billing.
+  final isIos = !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
   final adsSupported = !kIsWeb &&
-      (defaultTargetPlatform == TargetPlatform.android ||
-          defaultTargetPlatform == TargetPlatform.iOS);
-  final billingSupported =
-      !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
+      (defaultTargetPlatform == TargetPlatform.android || isIos);
+  final billingSupported = adsSupported;
   runApp(
     ProviderScope(
       overrides: [
@@ -59,7 +58,9 @@ Future<void> main() async {
           billingClientProvider.overrideWithValue(InAppPurchaseBillingClient()),
         if (billingSupported && firestore != null)
           subscriptionVerifierProvider.overrideWithValue(
-            CloudFunctionsSubscriptionVerifier.firebase(),
+            CloudFunctionsSubscriptionVerifier.firebase(
+              store: isIos ? 'apple' : null,
+            ),
           ),
         if (!kIsWeb && firestore != null) ...[
           accountServiceProvider.overrideWithValue(FirebaseAccountService()),
