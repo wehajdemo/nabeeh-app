@@ -48,7 +48,7 @@ Users and Access ← Integrations ← App Store Connect API ← Team Keys ← **
 1. سجّل في [codemagic.io](https://codemagic.io) بحساب GitHub (`wehajdemo`).
 2. Add application ← GitHub ← `wehajdemo/nabeeh-app` ← Flutter App ← يقرأ `codemagic.yaml` تلقائياً.
 3. Team settings ← Integrations ← **Developer Portal** ← Connect:
-   الاسم **`nabeeh_asc`** بالضبط، ثم Issuer ID و Key ID وارفع ملف `.p8`.
+   (تم: الحساب مربوط من قبل بمفتاح باسم `MUSAID` على نفس فريق Apple، و`codemagic.yaml` يستخدمه.)
 4. Team settings ← Code signing identities:
    - iOS certificates ← Generate certificate ← نوع **Apple Distribution**.
    - iOS provisioning profiles ← Fetch profiles ← أنشئ/اختر **App Store** profile لـ `com.rateby.rateby`.
