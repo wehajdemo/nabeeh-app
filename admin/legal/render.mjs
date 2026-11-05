@@ -17,6 +17,8 @@ export function placeholderValues(meta, lang) {
     effectiveDate: meta.effectiveDate[lang],
     monthlyPrice: money(lang, meta.monthlyPriceSar),
     yearlyPrice: money(lang, meta.yearlyPriceSar),
+    iosMonthlyPrice: money(lang, meta.iosMonthlyPriceSar),
+    iosYearlyPrice: money(lang, meta.iosYearlyPriceSar),
     trialDays: String(meta.trialDays),
     freeGoals: String(meta.freeGoalCount),
   };

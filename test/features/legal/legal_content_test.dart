@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rateby/core/constants/app_info.dart';
 import 'package:rateby/features/goals/presentation/goals_strings.dart';
@@ -65,6 +66,17 @@ void main() {
     expect(terms, contains('${PlusLimits.freeGoalCount} أهداف'));
     expect(PlusPlan.monthlyPrice.halalas, 900);
     expect(PlusPlan.yearlyPrice.halalas, 6700);
+  });
+
+  test('iPhone prices quoted in the terms match the App Store prices', () {
+    final terms = allText(LegalContent.parse(source).document(LegalKind.terms));
+    expect(terms, contains('9.99 ر.س شهرياً'));
+    expect(terms, contains('69.99 ر.س سنوياً'));
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    addTearDown(() => debugDefaultTargetPlatformOverride = null);
+    expect(PlusPlan.monthlyPrice.halalas, 999);
+    expect(PlusPlan.yearlyPrice.halalas, 6999);
+    expect(PlusPlan.yearlySavingsPercent, 42);
   });
 
   test('the policy says what the build does about ads', () {

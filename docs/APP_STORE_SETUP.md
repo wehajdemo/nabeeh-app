@@ -67,7 +67,7 @@ cd admin/functions && npm install && cd .. && firebase deploy --only functions
 بعد ما ينشر، اختيارياً: App Store Connect ← التطبيق ← App Information ← **App Store Server Notifications** ← Version 2 ← Production و Sandbox:
 `https://us-central1-rateby-app-sa.cloudfunctions.net/appStoreNotifications`
 
-لما يصير عندك رقم Apple ID للتطبيق (App Information ← Apple ID، رقم من 10 خانات) ضعه بدل الصفر في `APPLE_APP_ID` داخل `admin/functions/.env` وأعد النشر، عشان تُقبل مشتريات الإنتاج (TestFlight والمراجعة تشتغل بدونه).
+لما يصير عندك رقم Apple ID للتطبيق (App Information ← Apple ID، رقم من 10 خانات) ضعه بدل الصفر في `APPLE_APP_ID` داخل `admin/functions/.env` وأعد النشر (تم: 6831252529)، عشان تُقبل مشتريات الإنتاج (TestFlight والمراجعة تشتغل بدونه).
 
 ## 8. البناء والرفع لـ TestFlight
 

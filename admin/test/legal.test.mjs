@@ -65,8 +65,13 @@ test('with ads switched on, the policy discloses the ad network', () => {
 test('prices, trial and free limit match the app', () => {
   const plan = read('../../lib/features/upgrade/domain/plus_plan.dart');
   const gate = read('../../lib/features/upgrade/domain/plus_gate.dart');
-  assert.equal(Number(plan.match(/monthlyPrice = Money\.fromRiyals\((\d+)\)/)[1]), legal.meta.monthlyPriceSar);
-  assert.equal(Number(plan.match(/yearlyPrice = Money\.fromRiyals\((\d+)\)/)[1]), legal.meta.yearlyPriceSar);
+  // monthlyPrice => _isIos ? Money.fromHalalas(<iOS>) : Money.fromRiyals(<Google Play>)
+  const price = (name) => {
+    const m = plan.match(new RegExp(`${name} =>\\s*_isIos \\? Money\\.fromHalalas\\((\\d+)\\) : Money\\.fromRiyals\\((\\d+)\\)`));
+    return { ios: Number(m[1]) / 100, play: Number(m[2]) };
+  };
+  assert.deepEqual(price('monthlyPrice'), { ios: legal.meta.iosMonthlyPriceSar, play: legal.meta.monthlyPriceSar });
+  assert.deepEqual(price('yearlyPrice'), { ios: legal.meta.iosYearlyPriceSar, play: legal.meta.yearlyPriceSar });
   assert.equal(Number(plan.match(/trialDays = (\d+)/)[1]), legal.meta.trialDays);
   assert.equal(Number(gate.match(/freeGoalCount = (\d+)/)[1]), legal.meta.freeGoalCount);
 });

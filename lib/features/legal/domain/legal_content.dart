@@ -153,6 +153,8 @@ class LegalContent {
       'effectiveDate': localized('effectiveDate'),
       'monthlyPrice': money(meta['monthlyPriceSar']),
       'yearlyPrice': money(meta['yearlyPriceSar']),
+      'iosMonthlyPrice': money(meta['iosMonthlyPriceSar']),
+      'iosYearlyPrice': money(meta['iosYearlyPriceSar']),
       'trialDays': '${meta['trialDays']}',
       'freeGoals': '${meta['freeGoalCount']}',
     };

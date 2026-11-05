@@ -16,6 +16,8 @@
     },
     "monthlyPriceSar": 9,
     "yearlyPriceSar": 67,
+    "iosMonthlyPriceSar": 9.99,
+    "iosYearlyPriceSar": 69.99,
     "trialDays": 7,
     "freeGoalCount": 3
   },
@@ -281,7 +283,7 @@
             "blocks": [
               {
                 "bullets": [
-                  "الأسعار: {{monthlyPrice}} شهرياً أو {{yearlyPrice}} سنوياً، شاملة ضريبة القيمة المضافة.",
+                  "الأسعار: {{monthlyPrice}} شهرياً أو {{yearlyPrice}} سنوياً على Google Play، و{{iosMonthlyPrice}} شهرياً أو {{iosYearlyPrice}} سنوياً على App Store، شاملة ضريبة القيمة المضافة.",
                   "تجربة مجانية مدتها {{trialDays}} أيام للمشترك المؤهّل، ويحدد المتجر (Google Play أو App Store) أهليتك لها.",
                   "يتجدد الاشتراك تلقائياً في نهاية كل فترة ما لم تلغه قبل موعد التجديد.",
                   "تتم الفوترة والاسترداد عبر المتجر الذي اشتركت منه (Google Play أو App Store) وتخضع لسياساته. يتجدد الاشتراك تلقائياً ما لم تلغه قبل نهاية الفترة بـ 24 ساعة على الأقل. للإلغاء: Google Play ← المدفوعات والاشتراكات ← الاشتراكات، أو في الآيفون: الإعدادات ← اسمك ← الاشتراكات، أو زر «إدارة الاشتراك» في تبويب الترقية.",
@@ -367,7 +369,7 @@
             "blocks": [
               {
                 "bullets": [
-                  "Price: {{monthlyPrice}} per month or {{yearlyPrice}} per year, including VAT.",
+                  "Price: {{monthlyPrice}} per month or {{yearlyPrice}} per year on Google Play, and {{iosMonthlyPrice}} per month or {{iosYearlyPrice}} per year on the App Store, including VAT.",
                   "A {{trialDays}}-day free trial for eligible subscribers; the store (Google Play or the App Store) decides whether you are eligible.",
                   "The subscription renews automatically at the end of each period unless you cancel before the renewal date.",
                   "Billing and refunds are handled by the store you subscribed through (Google Play or the App Store) under its policies. The subscription renews automatically unless cancelled at least 24 hours before the end of the period. To cancel: Google Play → Payments & subscriptions → Subscriptions, or on iPhone: Settings → your name → Subscriptions, or the “Manage subscription” button in the Upgrade tab.",
