@@ -23,7 +23,8 @@ workflows:
         - pattern: 'ios-*'
           include: true
     environment:
-      flutter: stable
+      # Same version the app is tested with locally.
+      flutter: 3.38.9
       xcode: latest
       cocoapods: default
       ios_signing:
@@ -38,7 +39,11 @@ workflows:
         # Apple. Not set = Apple only. (Codemagic rejects empty values.)
     scripts:
       - name: Get packages
-        script: flutter pub get
+        script: |
+          # google_mobile_ads ships only CocoaPods; with Swift Package Manager
+          # on, pod install fails on the mix. Use CocoaPods for every plugin.
+          flutter config --no-enable-swift-package-manager
+          flutter pub get
       - name: Google sign-in URL scheme (only when a client id is set)
         script: |
           if [ -n "$GOOGLE_IOS_CLIENT_ID" ]; then
